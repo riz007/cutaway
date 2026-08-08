@@ -61,10 +61,10 @@ export function SystemRail() {
                   <SystemDot system={id} />
                 </span>
                 <span className="min-w-0 flex-1 truncate text-sm">{label}</span>
-                <span className="numeric shrink-0 text-2xs text-subtle">
+                <span aria-hidden className="numeric shrink-0 text-2xs text-subtle">
                   {count}
-                  <span className="sr-only"> {t('tree.count', { count })}</span>
                 </span>
+                <span className="sr-only">{t('tree.count', { count })}</span>
               </button>
 
               <button

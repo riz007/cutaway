@@ -1,0 +1,24 @@
+---
+title: LIN bus
+component: electrical.lin_bus
+system: electrical
+review: draft
+---
+
+A single-wire network for devices too slow and too unimportant to justify a place on the <Part id="electrical.can_bus" />.
+
+## What it does
+
+Not everything needs CAN's speed or robustness. A mirror motor, a seat adjuster, a rain sensor, a wiper module or an alternator regulator exchange a few bytes occasionally and do not care about a millisecond of delay. Putting them on CAN would be expensive overkill.
+
+LIN uses one wire plus the vehicle's own body as the return, and runs about forty times slower than CAN. It has a single master that polls each slave in a fixed schedule, so there is no arbitration to design and no collision to handle — the master simply asks and the slave answers.
+
+The result is a network node that costs a fraction of a CAN node. A typical car has one CAN backbone and several small LIN sub-networks hanging off it, each managed by a module that bridges to CAN.
+
+## How it fails
+
+Because it is single-wire and unshielded, it is more susceptible to electrical noise and to corrosion than CAN. A failed slave typically stops responding, and the master reports it missing.
+
+## How it is serviced
+
+Not a service item. Diagnosed with a scan tool and an oscilloscope.

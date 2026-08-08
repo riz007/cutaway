@@ -1,0 +1,28 @@
+---
+title: Oxygen (lambda) sensor
+component: air.o2_sensor
+system: air
+review: draft
+---
+
+A zirconia or titania element in the exhaust stream that reports how much oxygen is left after combustion. It is the feedback that closes the fuelling loop.
+
+## What it does
+
+The <Part id="air.maf_sensor" /> tells the ECU how much air arrived, and the ECU calculates fuel from that. But sensor drift, injector wear and fuel variation all mean the calculation is never exactly right. The oxygen sensor measures the result and lets the ECU trim continuously.
+
+Leftover oxygen means the mixture was lean; almost none means rich. A narrowband sensor switches sharply at stoichiometric, so the ECU deliberately oscillates the mixture slightly rich and lean many times a second, averaging exactly at the point where the <Part id="air.catalytic_converter" /> can perform all three of its reactions.
+
+A second sensor after the catalyst does a different job: comparing its signal with the front one measures how well the catalyst is still working.
+
+<Market region="Thailand">
+Ethanol content shifts the stoichiometric ratio — E20 needs noticeably more fuel per unit air than pure petrol. The oxygen sensor is what lets a non-flex-fuel engine adapt to varying blends automatically.
+</Market>
+
+## How it fails
+
+Slow response from age or contamination, which the ECU flags as a lazy sensor.
+
+## How it is serviced
+
+Replaced when faulty; some manufacturers specify an interval.

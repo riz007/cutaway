@@ -1,0 +1,28 @@
+---
+title: Front radar
+component: safety_adas.front_radar
+system: safety_adas
+review: draft
+---
+
+A millimetre-wave radar behind the front bumper, measuring the distance, relative speed and angle of objects ahead.
+
+## What it does
+
+It measures closing speed directly, which is what makes it valuable. A camera has to infer speed by watching an object grow between frames; radar reads it from the Doppler shift in the returned signal, instantly and precisely. That is why adaptive cruise control and autonomous emergency braking are built around radar rather than vision.
+
+It also works in conditions that defeat a camera: heavy rain, spray, fog, darkness and low sun. Its weakness is the mirror image — it measures range and speed superbly but resolves shape poorly, so it struggles to tell a stationary car from a manhole cover or a bridge. That is precisely why it is paired with the <Part id="safety_adas.windscreen_camera" />: radar says how far and how fast, the camera says what it is.
+
+Its output feeds the <Part id="braking.abs_modulator" />, which can build brake pressure without the driver touching the pedal.
+
+<Market region="Thailand">
+Dense mixed traffic with motorcycles filtering at close range is a demanding environment for these systems. They are driver aids, not substitutes for attention.
+</Market>
+
+## How it fails
+
+Misalignment after a minor front impact, and blockage by mud, snow or a non-original number plate or bumper trim.
+
+## How it is serviced
+
+Kept clean. Requires calibration after bumper removal or any front-end repair.

@@ -1,0 +1,24 @@
+---
+title: Intake manifold
+component: air.intake_manifold
+system: air
+review: draft
+---
+
+The branching casting that splits one throttle outlet into one runner per cylinder. Its geometry is engine tuning made physical.
+
+## What it does
+
+It distributes air evenly, which is harder than it looks — the cylinder nearest the throttle should not get more than the one furthest away.
+
+More interestingly, it uses wave dynamics. Each time an intake valve slams shut, it sends a pressure wave back up the runner. That wave reflects off the plenum and returns. If runner length is chosen so the returning wave arrives just as the valve opens again, it packs extra air into the cylinder for free. Long runners tune for low rpm, short runners for high.
+
+Some engines get both with a variable-length manifold: a flap opens a shortcut above a certain speed. On a diesel, swirl flaps in the runners generate charge motion at low load instead.
+
+## How it fails
+
+Carbon and oil mist from the <Part id="air.pcv_valve" /> and <Part id="air.egr_valve" /> build up inside, especially on diesels, where the deposit can eventually choke a runner almost shut. Plastic manifolds crack, and swirl flap linkages seize.
+
+## How it is serviced
+
+Not routine. Removed and cleaned when deposits cause driveability faults.

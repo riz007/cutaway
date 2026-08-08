@@ -1,0 +1,26 @@
+---
+title: Crash sensor
+component: safety_adas.crash_sensor
+system: safety_adas
+review: draft
+---
+
+Accelerometers — one set inside the airbag control module, plus satellite sensors in the front structure and the door sills — whose job is to make an irreversible decision in a few thousandths of a second.
+
+## What it does
+
+It distinguishes a real crash from everything else. That sounds trivial and is the hardest part of the whole restraint system: a kerb strike, a pothole, a slammed door and a heavy stone can all produce a sharp acceleration spike, and deploying airbags for any of them would be both dangerous and expensive.
+
+The module therefore does not act on peak acceleration. It integrates the signal over time to derive the velocity change, and compares that against calibrated thresholds. A pothole gives a big spike but almost no sustained velocity change; a genuine impact gives a smaller peak sustained for far longer.
+
+Satellite sensors at the front and in the sills provide early confirmation and tell the module where the impact came from, so it can choose which devices to fire — front airbags, curtains, pretensioners, or the fuel pump cut-off — and at what stage.
+
+The whole decision, from first contact to firing, takes 15 to 30 milliseconds.
+
+## How it fails
+
+Connector corrosion and sensor faults, which disable the restraint system and light the airbag lamp.
+
+## How it is serviced
+
+Not serviceable. Sensors in a deformed area are replaced after a crash.

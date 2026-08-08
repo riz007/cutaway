@@ -1,0 +1,28 @@
+---
+title: Seat belt pretensioner
+component: safety_adas.pretensioner
+system: safety_adas
+review: draft
+---
+
+A pyrotechnic device in the belt reel or buckle that pulls the belt tight in the first milliseconds of a crash, before the occupant has begun to move.
+
+## What it does
+
+A seat belt always has slack: webbing that is not quite flat against the body, plus a small amount of reel spool and clothing compression. That slack has to be taken up before the belt starts restraining, and during those few centimetres the occupant is accelerating freely.
+
+The pretensioner removes it. A small gas generator drives a piston or spins the reel, retracting several centimetres of webbing in about 10 milliseconds — before the <Part id="safety_adas.airbag_front" /> even begins to inflate. The occupant is coupled to the decelerating car from the very start.
+
+Its partner is the load limiter, which does the opposite: once the crash forces exceed a set level, a torsion bar in the reel deliberately yields and pays webbing back out. Restraining too hard would break ribs, so the belt is tightened first, then allowed to give in a controlled way — with the airbag catching what the belt lets go.
+
+<Warning>
+Pyrotechnic. Contains an explosive charge and must never be probed, powered or heated.
+</Warning>
+
+## How it fails
+
+Squib circuit faults, flagged by the airbag lamp.
+
+## How it is serviced
+
+Not serviceable. Replaced after deployment, never reused.

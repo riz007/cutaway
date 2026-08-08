@@ -1,0 +1,24 @@
+---
+title: Receiver / drier
+component: hvac.receiver_drier
+system: hvac
+review: draft
+---
+
+A canister in the high-pressure liquid line containing a desiccant bag and a filter. Small, cheap, and the component that protects everything else.
+
+## What it does
+
+Two jobs. As a receiver it holds a reserve of liquid refrigerant, so the <Part id="hvac.expansion_valve" /> is always fed pure liquid rather than a mixture of liquid and vapour — the valve can only meter properly if what arrives is entirely liquid.
+
+As a drier it removes moisture. This is the critical function. Water in a refrigerant circuit is destructive out of all proportion to its quantity: it reacts with the refrigerant and lubricant to form acids that corrode the system from inside, and it freezes at the expansion valve orifice, which is the coldest point, blocking the circuit intermittently. The symptom is air conditioning that cools well for ten minutes, then stops, then recovers.
+
+The desiccant has a finite capacity. Once saturated it cannot be regenerated in place.
+
+## How it fails
+
+By saturating, which happens quickly once the system has been opened to atmosphere.
+
+## How it is serviced
+
+Replaced whenever the circuit is opened for any other repair. This is not optional — reusing a saturated drier will damage the new component that was just fitted.

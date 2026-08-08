@@ -1,0 +1,28 @@
+---
+title: Battery chiller
+component: cooling.battery_chiller
+system: cooling
+review: draft
+---
+
+A plate heat exchanger that couples the air-conditioning refrigerant circuit to the battery's own coolant loop, giving the pack the ability to be cooled below ambient temperature.
+
+## What it does
+
+Lithium cells have a narrow comfortable band, roughly 15 to 35 degrees Celsius. Too cold and their internal resistance rises, cutting available power and regeneration. Too hot and they age rapidly and permanently.
+
+A radiator can only ever cool the pack towards ambient. On a hot day, or during DC fast charging where the pack generates serious heat, that is not enough. The chiller solves it by letting the <Part id="hvac.compressor" /> do the work: refrigerant expanding in the chiller absorbs heat from the pack coolant, so pack temperature can be pulled below outside air temperature.
+
+This is why an EV's climate system and battery thermal management are one integrated circuit rather than two.
+
+<Market region="Thailand">
+Thermal management is doing considerably more work here than in temperate markets. Sustained high ambient temperatures mean the chiller is frequently active, DC fast charging generates heat with less headroom to reject it, and pack longevity depends more heavily on this circuit functioning correctly.
+</Market>
+
+## How it fails
+
+Refrigerant loss, coolant pump faults, and valve failures that leave the pack on radiator cooling only.
+
+## How it is serviced
+
+Coolant on the manufacturer's schedule; refrigerant charge verified during air-conditioning service.

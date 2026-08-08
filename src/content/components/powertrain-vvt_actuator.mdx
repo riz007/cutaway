@@ -1,0 +1,26 @@
+---
+title: Variable valve timing actuator
+component: powertrain.vvt_actuator
+system: powertrain
+review: draft
+---
+
+A hydraulic vane unit sandwiched between the camshaft and its drive sprocket. The engine control unit uses it to rotate the cam a few degrees either way while the engine is running.
+
+## What it does
+
+Valve timing is a compromise. Timing that fills the cylinder at 6,000 rpm gives a lumpy idle and weak low-speed torque; timing that idles smoothly chokes the engine at high rpm. Variable timing removes the compromise by changing the phase as conditions change.
+
+Inside are vanes in chambers. Oil from the <Part id="lubrication.oil_pump" />, admitted to one side or the other by a solenoid valve, rotates the vane relative to the housing and so advances or retards the cam.
+
+<Note>
+It depends entirely on oil pressure and cleanliness. This is one of the parts that makes an oil change interval a functional requirement rather than a suggestion — a clogged control valve screen will set a timing fault long before anything else complains.
+</Note>
+
+## How it fails
+
+A blocked oil control valve, a worn locking pin that lets the vane rattle at start-up, or low oil pressure. The usual symptom is a rattle for a second on a cold start plus a camshaft position correlation fault code.
+
+## How it is serviced
+
+Through the oil. Correct grade, correct interval.

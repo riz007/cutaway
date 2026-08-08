@@ -1,0 +1,28 @@
+---
+title: Yaw rate sensor
+component: safety_adas.yaw_sensor
+system: safety_adas
+review: draft
+---
+
+A small MEMS gyroscope mounted low and near the vehicle's centre of gravity, measuring how fast the car is rotating about its vertical axis. It is the sensor that makes stability control possible.
+
+## What it does
+
+It answers one question: is the car actually turning at the rate the driver asked for?
+
+The steering angle sensor and the <Part id="braking.wheel_speed_sensor" /> signals tell the controller what the driver intended — this much lock at this speed implies this rate of rotation. The yaw sensor measures what the car is really doing. The difference between the two is the whole basis of electronic stability control.
+
+If the car is rotating less than intended, it is understeering, ploughing on towards the outside of the bend. If it is rotating more, it is oversteering and beginning to spin.
+
+The correction is elegantly simple: brake one wheel. Braking the inside rear wheel generates a moment that helps the car rotate more; braking the outside front does the opposite. The <Part id="braking.abs_modulator" /> applies it at individual wheels, and the driver usually feels nothing but a brief pulse.
+
+The unit typically also contains a lateral accelerometer and, on tall vehicles, a roll rate sensor for rollover mitigation.
+
+## How it fails
+
+Sensor drift and internal faults, which disable stability control.
+
+## How it is serviced
+
+Not serviceable. Requires a static calibration if disturbed.

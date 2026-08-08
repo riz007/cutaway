@@ -123,9 +123,11 @@ export function AppShell() {
       </header>
 
       <main id="main" className="min-h-0 flex-1">
-        <h1 className="sr-only">
-          {t('app.title')} — {t('app.tagline')}
-        </h1>
+        {!showFallback && (
+          <h1 className="sr-only">
+            {t('app.title')} — {t('app.tagline')}
+          </h1>
+        )}
         {showFallback ? (
           <TextAnatomy />
         ) : (

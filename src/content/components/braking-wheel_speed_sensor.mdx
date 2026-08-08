@@ -1,0 +1,24 @@
+---
+title: Wheel speed sensor
+component: braking.wheel_speed_sensor
+system: braking
+review: draft
+---
+
+A small sensor at each hub reading a toothed or magnetically encoded ring that turns with the wheel. It is one of the most widely used signals in the whole vehicle.
+
+## What it does
+
+It reports how fast each wheel is turning, individually. From those four numbers a remarkable amount is derived.
+
+The <Part id="braking.abs_modulator" /> compares each wheel against the others to detect a wheel decelerating far faster than the vehicle can be — the signature of a wheel about to lock. Traction control watches for the opposite. Stability control combines them with the <Part id="safety_adas.yaw_sensor" /> to work out whether the car is following the path the steering asked for. The speedometer, odometer, cruise control and tyre pressure monitoring all read the same signals.
+
+Modern sensors are active — powered, using a Hall effect element — rather than passive, which lets them read down to walking pace and even detect direction of rotation. That is what makes hill-hold and rollback detection possible.
+
+## How it fails
+
+Corroded connectors, damaged cables from stone strikes, and debris on the encoder ring. One faulty sensor typically disables ABS, stability control and cruise together, illuminating several lights at once.
+
+## How it is serviced
+
+Not routine. The ring is cleaned when the hub is disturbed.

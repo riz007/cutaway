@@ -44,8 +44,18 @@ function Warning({ children }: { children?: ReactNode }) {
   );
 }
 
+function Market({ region = 'Thailand', children }: { region?: string; children?: ReactNode }) {
+  return (
+    <aside className="rounded-[var(--radius-control)] border border-primary/30 bg-primary/8 px-3 py-2 text-[0.9375rem] leading-relaxed text-muted">
+      <span className="mb-1 block text-2xs font-semibold uppercase tracking-[0.06em] text-primary">{region}</span>
+      {children}
+    </aside>
+  );
+}
+
 export const mdxComponents = {
   Part,
   Note,
   Warning,
+  Market,
 };

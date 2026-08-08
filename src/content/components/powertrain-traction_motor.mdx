@@ -1,0 +1,28 @@
+---
+title: Traction motor
+component: powertrain.traction_motor
+system: powertrain
+review: draft
+---
+
+The whole propulsion system of an electric car, in one sealed housing with no gearbox, clutch, exhaust or cooling fan of its own.
+
+## What it does
+
+It produces torque from a rotating magnetic field in the stator dragging the rotor around with it. The <Part id="electrical.inverter" /> creates that field and controls its strength and phase, so the inverter — not the motor — is where the intelligence lives.
+
+The torque curve is the reason an EV feels the way it does. Full torque is available from a standstill and stays flat until base speed, after which it tapers to hold constant power. A combustion engine produces almost nothing below a thousand rpm and needs a gearbox to hide that; an electric motor needs one fixed <Part id="drivetrain.reduction_gear" /> and nothing else.
+
+It is also bidirectional, so the same machine recovers energy under braking.
+
+<Warning>
+High voltage. The motor generates voltage whenever the wheels turn. A vehicle being towed with driven wheels on the ground can energise its own system.
+</Warning>
+
+## How it fails
+
+Bearing wear and, rarely, insulation or coolant-seal failure. Motors typically outlast the pack.
+
+## How it is serviced
+
+Coolant on schedule. The unit itself is not user-serviceable.

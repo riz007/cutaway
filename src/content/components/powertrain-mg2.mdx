@@ -1,0 +1,28 @@
+---
+title: Motor-generator 2 (MG2)
+component: powertrain.mg2
+system: powertrain
+review: draft
+---
+
+The larger electric machine, geared to the ring gear and so directly to the wheels. It is what actually drives a hybrid most of the time in traffic.
+
+## What it does
+
+As a motor it provides torque from zero rpm, which covers exactly the region a combustion engine is worst at — pulling away and low-speed acceleration. That is why a hybrid feels brisk in town and why its engine can stay off there entirely.
+
+As a generator it recovers energy. Lift off or brake and the wheels drive MG2 backwards through the gearset; it becomes a generator, the <Part id="electrical.inverter" /> rectifies the output into the pack, and the resistance the driver feels is energy being banked rather than thrown away as heat. <Part id="braking.regen_blending" /> decides how much of the deceleration it provides.
+
+Because it is tied to the ring gear, its speed is proportional to road speed at all times.
+
+<Warning>
+High voltage. Its windings can generate a dangerous voltage whenever the wheels turn, even with the vehicle switched off and the pack isolated.
+</Warning>
+
+## How it fails
+
+Seldom. Coolant ingress and resolver faults are the documented modes.
+
+## How it is serviced
+
+Transaxle fluid and, on liquid-cooled units, coolant, both on schedule.

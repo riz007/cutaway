@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "Interactive 3D car anatomy emulator — a teaching tool.",
+  "description": "Interactive 3D car anatomy emulator \u2014 a teaching tool.",
   "scripts": {
     "dev": "vite",
     "build": "npm run validate && tsc -b && vite build && npm run budgets",
@@ -14,7 +14,8 @@
     "budgets": "node scripts/check-budgets.mjs",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "build:app": "vite build"
   },
   "dependencies": {
     "@mdx-js/react": "^3.1.0",

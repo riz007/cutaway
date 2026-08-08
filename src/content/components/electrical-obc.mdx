@@ -1,0 +1,28 @@
+---
+title: On-board charger
+component: electrical.obc
+system: electrical
+review: draft
+---
+
+The converter that lets an electric vehicle charge from ordinary AC mains. It is the reason AC charging is limited to a handful of kilowatts while DC charging is not.
+
+## What it does
+
+Batteries take direct current; the grid supplies alternating current. Something has to rectify and regulate, and on AC charging that something rides in the car.
+
+It draws AC, rectifies it, corrects the power factor so the vehicle behaves as a well-mannered load, and produces a controlled DC output at whatever voltage the pack is currently at, under the supervision of the <Part id="electrical.bms" />.
+
+Its rating sets AC charging speed — typically 7 to 11 kW — and that limit is about weight, cost and cooling, not about the pack. This is exactly why DC rapid charging is different in kind rather than degree: a DC charger does the conversion in the roadside cabinet, where size does not matter, and feeds the pack directly through the <Part id="electrical.charge_port" />, bypassing the on-board charger entirely.
+
+<Warning>
+High voltage on both its input and output sides.
+</Warning>
+
+## How it fails
+
+Thermal failure of the power stage, usually after prolonged charging in high ambient temperature.
+
+## How it is serviced
+
+Not serviceable. Its cooling circuit is maintained with the rest of the thermal system.

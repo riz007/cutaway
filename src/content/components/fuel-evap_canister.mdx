@@ -1,0 +1,28 @@
+---
+title: EVAP charcoal canister
+component: fuel.evap_canister
+system: fuel
+review: draft
+---
+
+A box of activated charcoal between the fuel tank and the atmosphere. It exists because petrol evaporates, and evaporated petrol is both a pollutant and wasted fuel.
+
+## What it does
+
+Vapour from the tank — generated whenever fuel warms up or the car is refuelled — is routed into the canister, where the charcoal adsorbs the hydrocarbons and lets clean air out of the vent.
+
+The charcoal would saturate if that were all. So while the engine runs, the ECU opens a purge valve that lets manifold vacuum draw fresh air backwards through the canister, stripping the stored hydrocarbons off the charcoal and pulling them into the <Part id="air.intake_manifold" /> to be burnt. The system regenerates itself continuously.
+
+Because purging adds unmetered fuel, the ECU must compensate, which is why purge is scheduled rather than constant.
+
+<Note>
+The whole tank is a sealed pressure system, which is why a loose filler cap illuminates the engine light: the ECU pressure-tests the circuit and a missing seal reads as a large leak.
+</Note>
+
+## How it fails
+
+Saturation from repeated over-filling at the pump, and stuck purge valves that cause rough idling or a fuel smell.
+
+## How it is serviced
+
+Not a service item. Stop filling at the pump's first click.

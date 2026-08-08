@@ -1,0 +1,26 @@
+---
+title: A/C compressor
+component: hvac.compressor
+system: hvac
+review: draft
+---
+
+The pump of the refrigerant circuit and the only component in it that does work. Everything else in the loop simply exploits what the compressor has done.
+
+## What it does
+
+It draws in cold low-pressure refrigerant vapour from the <Part id="hvac.evaporator" /> and compresses it, which raises both its pressure and its temperature. It has to become hotter than the outside air, because otherwise the <Part id="hvac.condenser" /> could not reject heat into that air. That is the whole trick of refrigeration: raise the working fluid above ambient so heat flows out of it naturally.
+
+On an engine-driven car it is belt-driven through an electromagnetic clutch, so it can be disengaged when cooling is not needed. On hybrids and EVs it is an electrically driven unit, which lets the cabin be cooled with the engine off and the pack chilled while parked and charging.
+
+<Warning>
+The circuit is under high pressure. Refrigerant causes freeze burns on contact and must be recovered by licensed equipment, never vented.
+</Warning>
+
+## How it fails
+
+Clutch coil failure, bearing wear, and internal seizure. A seizure sends metal debris around the whole circuit, which then requires flushing and replacement of the receiver-drier and expansion valve.
+
+## How it is serviced
+
+Running the air conditioning briefly even in cool weather circulates oil and keeps the shaft seal lubricated.

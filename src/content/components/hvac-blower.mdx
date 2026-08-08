@@ -1,0 +1,26 @@
+---
+title: Blower motor
+component: hvac.blower
+system: hvac
+review: draft
+---
+
+A squirrel-cage fan in the HVAC housing that moves cabin air across the <Part id="hvac.evaporator" /> and <Part id="cooling.heater_core" />.
+
+## What it does
+
+It is the only thing that makes the climate system move air at a standstill, and it is usually the largest single electrical load in the cabin.
+
+The centrifugal squirrel-cage design is chosen over an axial fan because it produces useful pressure, not just flow — it has to push air through a filter, two heat exchanger cores and a duct network with several bends before it reaches a vent.
+
+Speed control matters more than it seems. Older systems dropped voltage across a resistor pack, wasting the difference as heat. Modern systems use a solid-state controller with pulse-width modulation, which is efficient and gives genuinely variable speed rather than four steps.
+
+Air is drawn either from outside or, in recirculation mode, from the cabin. Recirculation cools much faster because the air is already cold, at the cost of rising humidity and CO2.
+
+## How it fails
+
+Bearing wear, giving noise that changes with fan speed; debris jamming the cage; and resistor pack failure, whose signature is a fan that works only on maximum.
+
+## How it is serviced
+
+Not a service item, but its current draw rises as the <Part id="hvac.cabin_filter" /> blocks.

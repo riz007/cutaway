@@ -1,0 +1,26 @@
+---
+title: Ultrasonic sensor
+component: safety_adas.ultrasonic_sensor
+system: safety_adas
+review: draft
+---
+
+The small round transducers in the bumpers. Each emits a burst of sound above human hearing and times how long the echo takes to return.
+
+## What it does
+
+Distance from time of flight: sound travels roughly 343 metres per second, so an echo returning in 6 milliseconds means an object about a metre away. Simple, cheap and accurate at close range.
+
+They are deliberately short-range — a few metres at most — which suits parking precisely and makes them useless for anything else. Their beam is also wide and their resolution poor, so they detect that something is there rather than what it is.
+
+Using several across a bumper allows a crude form of triangulation: comparing which sensors hear an echo and when locates the object laterally, which is how automated parking systems measure a parking space as the car drives past it.
+
+Their limits are worth knowing. They can miss objects that scatter sound rather than reflect it — a narrow post, chain link, or a soft surface — and they are confused by heavy rain and by other vehicles' sensors.
+
+## How it fails
+
+Blockage by mud or ice, water ingress, and damage from bumper impacts. Symptoms are false continuous alarms or a dead zone.
+
+## How it is serviced
+
+Kept clean. Repainting a bumper over the sensor faces will deafen them.

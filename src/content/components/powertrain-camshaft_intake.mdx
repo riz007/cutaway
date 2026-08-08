@@ -1,0 +1,24 @@
+---
+title: Intake camshaft
+component: powertrain.camshaft_intake
+system: powertrain
+review: draft
+---
+
+A shaft with an eccentric lobe for each valve. As it turns, each lobe pushes its valve open and the spring closes it again. Everything about how an engine breathes is ground into those lobe shapes.
+
+## What it does
+
+The lobe profile sets three things: how far the valve opens, how long it stays open, and how quickly it gets there. More lift and longer duration let more air in at high rpm, at the cost of a rough idle and poor low-speed torque, because the valve is still open when it should be sealing.
+
+The cam turns at exactly half crankshaft speed, held there by the <Part id="powertrain.timing_chain" />, because a four-stroke cycle takes two crank revolutions.
+
+Its phase relative to the crank is what the <Part id="powertrain.vvt_actuator" /> shifts, letting one engine behave like a mild cam at idle and a wild one at full load.
+
+## How it fails
+
+Lobe wear, which flattens the profile and quietly costs power, and journal wear from poor lubrication. A snapped cam is rare and usually secondary to a seized valve.
+
+## How it is serviced
+
+Nothing routine. Oil changes on schedule protect it, since it is one of the last things gallery pressure reaches.

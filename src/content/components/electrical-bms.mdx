@@ -1,0 +1,28 @@
+---
+title: Battery management system
+component: electrical.bms
+system: electrical
+review: draft
+---
+
+The controller that makes a traction pack safe and long-lived. Without it, a large lithium pack is not usable.
+
+## What it does
+
+Three jobs. It monitors: every cell group's voltage and temperature, continuously. It protects: it commands the <Part id="electrical.contactor" /> open if anything goes out of range, and it limits charge and discharge current so cells are never pushed beyond what they can take at their current temperature and state of charge.
+
+And it balances. Cells age at slightly different rates, and a series string is limited by its weakest member — the pack must stop discharging when the lowest cell hits its floor and stop charging when the highest hits its ceiling. Balancing bleeds tiny amounts of charge from the strongest cells so the string stays matched, which is why leaving an EV plugged in after it reaches full is not wasted time.
+
+It also estimates state of charge, which cannot be measured directly and must be inferred from voltage, current integration and a cell model.
+
+<Warning>
+High voltage. Its sense wiring runs directly to the cell taps inside the pack.
+</Warning>
+
+## How it fails
+
+Sense-wire and connector faults giving implausible cell readings, which the system treats as a fault and responds to by limiting power.
+
+## How it is serviced
+
+Not serviceable.

@@ -1,0 +1,30 @@
+---
+title: Engine control unit
+component: electrical.ecu_engine
+system: electrical
+review: draft
+---
+
+The computer that decides, thousands of times a second, exactly how much fuel to inject and precisely when to ignite it.
+
+## What it does
+
+It reads a set of sensors — crank and cam position, <Part id="air.maf_sensor" />, coolant and intake temperature, throttle position, knock sensor, <Part id="air.o2_sensor" /> — and computes outputs against calibrated maps and models.
+
+Crank position is the master clock. Everything is scheduled in crank degrees rather than in time, because the engine's events are angular, not temporal.
+
+Two loops run simultaneously. The open loop calculates base fuelling from measured airflow. The closed loop reads the oxygen sensor and trims that calculation continuously, learning the correction and storing it as fuel trim — which is why long-term fuel trim values are one of the most useful diagnostic numbers available.
+
+It also runs knock control, retarding ignition on any cylinder that detonates, which is what allows one calibration to tolerate varying fuel quality.
+
+<Market region="Thailand">
+Adaptive fuel trim and knock control are what let the same engine run acceptably on gasohol grades of differing ethanol content and octane without driver intervention.
+</Market>
+
+## How it fails
+
+Rarely as hardware. Water ingress and connector corrosion are the usual causes.
+
+## How it is serviced
+
+Not a service item. Replacements normally require coding to the vehicle's immobiliser.

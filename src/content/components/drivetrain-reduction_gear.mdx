@@ -1,0 +1,24 @@
+---
+title: Reduction gear
+component: drivetrain.reduction_gear
+system: drivetrain
+review: draft
+---
+
+A single fixed gear reduction between the <Part id="powertrain.traction_motor" /> and the wheels, typically around 9:1. There is nothing to shift.
+
+## What it does
+
+It converts the motor's high speed and modest torque into the low speed and high torque the wheels need. A traction motor may spin to 16,000 rpm while a wheel turns at 1,000 rpm at motorway speed, and the reduction bridges that.
+
+The interesting question is why one ratio is enough when a combustion car needs six. It comes down to the shape of the torque curve. A combustion engine produces nothing below idle and useful torque only over a narrow band, so it needs multiple ratios to keep itself inside that band. An electric motor makes full torque from zero rpm and holds usable power across a very wide speed range, so one ratio covers standstill to top speed without compromise.
+
+The result is fewer parts, no shift interruption, no clutch, and a great deal less to go wrong.
+
+## How it fails
+
+Bearing wear, giving a whine that rises with road speed. Because there is no engine noise to mask it, gear whine is more audible in an EV and is often normal rather than a fault.
+
+## How it is serviced
+
+Oil on the manufacturer's schedule, which on many EVs is a very long interval or lifetime fill.

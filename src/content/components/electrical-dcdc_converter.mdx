@@ -1,0 +1,28 @@
+---
+title: DC-DC converter
+component: electrical.dcdc_converter
+system: electrical
+review: draft
+---
+
+An electronic converter that steps the traction pack's several hundred volts down to the ~14 V the ordinary vehicle systems expect. On an electrified vehicle it does the alternator's job.
+
+## What it does
+
+An electrified car still has an entirely conventional 12 V network — lights, wipers, ECUs, infotainment, the <Part id="braking.abs_modulator" />. Rather than carry a second charging system, the DC-DC converter takes the energy it needs from the <Part id="powertrain.hv_battery" />.
+
+It does this by switching the high voltage into a small transformer at tens of kilohertz, then rectifying and smoothing the output. High frequency is what lets the transformer be small; a mains-frequency transformer of the same rating would be enormous.
+
+It is better than an alternator in two respects: it is more efficient, and it works with the engine off, which is precisely the condition a hybrid spends much of its time in.
+
+<Warning>
+High voltage on its input side. Only trained personnel with the correct equipment should open one.
+</Warning>
+
+## How it fails
+
+Thermal failure of the power stage, and coolant leaks on liquid-cooled units. The symptom is a 12 V battery that goes flat despite the traction pack being charged.
+
+## How it is serviced
+
+Not serviceable. Its cooling circuit is maintained with the rest of the thermal system.

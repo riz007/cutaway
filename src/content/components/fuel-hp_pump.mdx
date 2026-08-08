@@ -1,0 +1,28 @@
+---
+title: High-pressure pump
+component: fuel.hp_pump
+system: fuel
+review: draft
+---
+
+Driven mechanically off the camshaft, this pump takes fuel at a few bar from the <Part id="fuel.in_tank_pump" /> and raises it to the pressure the injectors need — commonly over 1,500 bar on a modern common-rail diesel.
+
+## What it does
+
+That pressure is not about pushing more fuel through. It is about atomisation. A diesel injects into air that is already at combustion temperature, so the spray has to break into droplets fine enough to evaporate and mix in a fraction of a millisecond. Finer atomisation means more complete combustion, which means more power and less soot for the <Part id="fuel.dpf" /> to trap.
+
+Rail pressure is actively controlled, not fixed: the ECU raises it with load and holds it lower at idle, where a very fine spray is not needed and noise matters more.
+
+Critically, the pump is lubricated by the fuel passing through it. There is no separate oil supply.
+
+<Market region="Thailand">
+Because the fuel is the lubricant, fuel quality is a mechanical concern, not just a combustion one. Water carried in biodiesel blends is the main threat — it displaces the lubricating film and corrodes the fine clearances. Draining the filter's water trap on schedule protects the most expensive part of the fuel system.
+</Market>
+
+## How it fails
+
+Wear from water or particulate contamination, which sends metal debris downstream into the injectors and often condemns the whole system.
+
+## How it is serviced
+
+Not serviceable. Protected entirely by the filter.

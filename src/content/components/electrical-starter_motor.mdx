@@ -1,0 +1,26 @@
+---
+title: Starter motor
+component: electrical.starter_motor
+system: electrical
+review: draft
+---
+
+A brutally simple, very high current DC motor whose only job is to turn the engine fast enough to start itself.
+
+## What it does
+
+It has to spin the engine to roughly 200 rpm against compression, and it needs a lot of torque to do it — which means a lot of current, often over 150 amperes and briefly far more. That is why it has its own heavy cable straight from the <Part id="electrical.battery_12v" /> rather than going through a fuse box.
+
+A solenoid on top does two things at once when energised: it pushes a pinion gear forward to engage the ring gear on the <Part id="powertrain.flywheel" />, and only then closes a heavy contact that feeds the motor. The order matters — engaging a spinning pinion would destroy both gears.
+
+A one-way clutch in the pinion lets it disengage the instant the engine fires and starts turning faster than the motor.
+
+Stop-start systems use a reinforced starter designed for far more cycles.
+
+## How it fails
+
+Worn brushes, burnt solenoid contacts giving the familiar single click, and a worn pinion or ring gear producing a grinding noise.
+
+## How it is serviced
+
+Not a service item. Slow cranking is usually the battery or its cables, not the starter.

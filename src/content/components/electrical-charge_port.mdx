@@ -1,0 +1,28 @@
+---
+title: Charge port
+component: electrical.charge_port
+system: electrical
+review: draft
+---
+
+The vehicle's inlet, combining AC pins, DC pins, a locking mechanism, temperature sensors and a communication link in one connector.
+
+## What it does
+
+Far more than pass current. Before any power flows, the vehicle and the charging equipment hold a conversation over dedicated pilot pins: the equipment declares how much current it can supply, the vehicle states what it wants, and only when both agree do the contactors close. A charging cable lying in a puddle is inert until that handshake completes.
+
+The connector locks during charging, both so it cannot be pulled out under load — which would arc badly at DC currents — and so it cannot be unplugged by a passer-by.
+
+Temperature sensors sit in the DC pins. At 200 kW the contact resistance of a slightly dirty pin generates real heat, so the vehicle monitors pin temperature and reduces current rather than risk damage. A charge that tapers on a hot day is often this, not the pack.
+
+<Market region="Thailand">
+CCS2 is the prevailing DC standard for new vehicles in Thailand, though GB/T appears on some Chinese-market imports. Ambient heat means pin-temperature derating is more commonly encountered here than in cooler climates.
+</Market>
+
+## How it fails
+
+Worn or corroded pins raising contact resistance, and lock actuator failure.
+
+## How it is serviced
+
+Kept clean and dry; the flap seal is worth checking.

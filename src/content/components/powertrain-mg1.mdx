@@ -1,0 +1,28 @@
+---
+title: Motor-generator 1 (MG1)
+component: powertrain.mg1
+system: powertrain
+review: draft
+---
+
+The smaller of the two electric machines in a power-split hybrid, and the one that does the least obvious work. It is connected to the sun gear of the <Part id="powertrain.planetary_gearset" />.
+
+## What it does
+
+Two things. It starts the engine — there is no conventional starter motor — by spinning up against the reaction of the gearset, which is why a hybrid engine starts almost silently and instantly.
+
+More importantly, it controls engine speed. Because the three shafts of the planetary set are mechanically tied, fixing MG1's speed fixes the engine's speed for any given road speed. The controller uses this to hold the engine at whatever speed is most efficient for the power being demanded, regardless of how fast the car is going.
+
+While doing that it acts as a generator, and the electricity it produces either feeds <Part id="powertrain.mg2" /> directly or charges the pack.
+
+<Warning>
+High voltage. Only trained personnel with insulated tools and appropriate protective equipment should work on this system.
+</Warning>
+
+## How it fails
+
+Rarely. Resolver faults and stator insulation breakdown are the known modes, both diagnosed with manufacturer equipment.
+
+## How it is serviced
+
+Transaxle fluid on schedule. Nothing else.

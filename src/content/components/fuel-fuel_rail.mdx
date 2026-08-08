@@ -1,0 +1,28 @@
+---
+title: Fuel rail
+component: fuel.fuel_rail
+system: fuel
+review: draft
+---
+
+A tube bolted across the engine with the injectors plugged into it. Simple in appearance, and doing something more subtle than just distributing fuel.
+
+## What it does
+
+It holds every injector at the same pressure. That matters because injector delivery is calculated from pulse width alone, and pulse width only translates to a known mass of fuel if pressure is known and equal at each nozzle.
+
+It also acts as an accumulator. Each injector opening is a sudden demand that would otherwise drop pressure locally and send a pulse back down the line. The rail's internal volume damps those pulses so cylinder four gets the same fuelling as cylinder one.
+
+On a direct-injection engine the rail is a far heavier forging, because it holds 200 bar or more rather than the 3 to 5 bar of a port-injected system. Diesel common rails run higher still, fed by the <Part id="fuel.hp_pump" />.
+
+<Warning>
+Pressurised, and on direct-injection and diesel systems dangerously so. A high-pressure spray can penetrate skin. Never slacken a rail fitting on a running or recently run engine.
+</Warning>
+
+## How it fails
+
+Leaks at the injector seals rather than in the rail itself.
+
+## How it is serviced
+
+Not a service item.

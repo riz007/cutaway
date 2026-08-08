@@ -1,0 +1,26 @@
+---
+title: Evaporator
+component: hvac.evaporator
+system: hvac
+review: draft
+---
+
+A finned heat exchanger buried in the dashboard, and the only part of the air-conditioning circuit that actually makes the cabin cooler.
+
+## What it does
+
+Cold low-pressure refrigerant arrives from the <Part id="hvac.expansion_valve" /> as a liquid and vapour mixture and boils as it absorbs heat from cabin air blown across it by the <Part id="hvac.blower" />. Boiling absorbs a great deal of energy at constant temperature, which is why a phase change is used rather than simply circulating something cold.
+
+It also dehumidifies, and that is half its value in a humid climate. Its surface sits below the dew point, so moisture condenses out of the air and drains away through a tube in the floor. Air leaving the evaporator is not just cooler but drier, which is why the air conditioning clears a fogged windscreen faster than heat alone.
+
+<Market region="Thailand">
+Dehumidification is doing enormous work here. The condensate puddle under a parked car is normal and expected. A blocked drain tube is a common fault and shows as damp carpets and a musty smell rather than as a cooling problem.
+</Market>
+
+## How it fails
+
+Corrosion leaks, and microbial growth on the permanently damp fins causing odour.
+
+## How it is serviced
+
+Rarely accessible without dashboard removal. Keeping the <Part id="hvac.cabin_filter" /> fresh and the drain clear is the practical maintenance.

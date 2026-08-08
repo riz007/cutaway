@@ -1,0 +1,26 @@
+---
+title: Ignition coil
+component: electrical.ignition_coil
+system: electrical
+review: draft
+---
+
+A transformer that turns the vehicle's 12 volts into the tens of thousands needed to jump the <Part id="powertrain.spark_plug" /> gap.
+
+## What it does
+
+It stores energy in a magnetic field, then collapses that field suddenly. Current through the primary winding builds a field in the iron core; when the ECU switches the primary off, the field collapses across the secondary winding, which has far more turns. The turns ratio multiplies the voltage — a ratio of a hundred to one turns a few hundred volts of collapse into tens of kilovolts.
+
+The voltage produced is only ever as high as it needs to be. The spark jumps as soon as the gap breaks down, which clamps the voltage there. A worn plug with a wide gap forces the coil to work harder, which is why worn plugs kill coils.
+
+Dwell time — how long the primary is energised before firing — determines how much energy is stored, and the ECU adjusts it with engine speed and battery voltage.
+
+Coil-on-plug designs put one coil directly on each plug, removing HT leads entirely.
+
+## How it fails
+
+Insulation breakdown from heat and age, which lets the spark track to earth instead of jumping the gap. The symptom is a misfire under load, when cylinder pressure makes the gap hardest to bridge.
+
+## How it is serviced
+
+Not a service item. Replace worn plugs on interval to protect them.

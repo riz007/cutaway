@@ -1,0 +1,24 @@
+---
+title: Body control module
+component: electrical.ecu_body
+system: electrical
+review: draft
+---
+
+The module that runs everything unrelated to making the car move: lighting, locking, wipers, windows, alarm, interior lighting and the comfort functions.
+
+## What it does
+
+It replaced a great deal of wiring. In a conventional layout, the headlight switch carried headlight current, the door lock switch carried lock motor current, and each ran a heavy cable across the car. With a body module, switches become low-current inputs and the module drives the loads through outputs placed near them, which removes kilometres of copper and a great deal of weight.
+
+Doing it in software also allows behaviour that hardwiring cannot: lights that stay on for thirty seconds after you lock the car, wipers that adjust to road speed, indicators that flash three times from a tap, windows that close on a long press of the key.
+
+It is also the gateway for much of the diagnostic and security functionality, and it usually manages the vehicle's sleep behaviour — deciding when modules may power down to protect the <Part id="electrical.battery_12v" />.
+
+## How it fails
+
+Water ingress, and software faults that resolve with a reset. Because it touches so many functions, one fault often presents as several unrelated symptoms at once.
+
+## How it is serviced
+
+Not a service item; requires coding when replaced.

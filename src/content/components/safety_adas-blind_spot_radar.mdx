@@ -1,0 +1,30 @@
+---
+title: Blind-spot radar
+component: safety_adas.blind_spot_radar
+system: safety_adas
+review: draft
+---
+
+A short-range radar in each rear corner of the vehicle, watching the adjacent lanes alongside and behind.
+
+## What it does
+
+It covers the region the mirrors cannot. Even a well-adjusted mirror set leaves a wedge beside and slightly behind the car where a vehicle is invisible, and it is exactly where an overtaking car sits during a lane change.
+
+Detection is not enough on its own; it has to distinguish a vehicle in the next lane from the crash barrier, a parked line of cars, or a vehicle two lanes over. It does that by tracking relative velocity and lateral position over time, so a stationary roadside object is filtered out while a car closing at a few kilometres per hour is not.
+
+The same sensors provide rear cross-traffic alert when reversing out of a parking space, where they can see approaching traffic long before the driver can.
+
+They are mounted inside the plastic bumper, which is transparent to radar — but metallic paint, stickers and towbar accessories are not necessarily so.
+
+<Market region="Thailand">
+Motorcycles filtering between lanes are the common case here and the hardest for these systems: they are small radar targets, approach fast and appear from unexpected angles. The alert is a supplement to a shoulder check, not a replacement for one.
+</Market>
+
+## How it fails
+
+Misalignment after a rear impact, and obstruction from bumper repairs or accessories.
+
+## How it is serviced
+
+Calibration after rear bumper work.

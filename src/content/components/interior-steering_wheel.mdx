@@ -1,0 +1,30 @@
+---
+title: Steering wheel
+component: interior.steering_wheel
+system: interior
+review: draft
+---
+
+The driver's primary control, the housing for the driver airbag, and increasingly the location of most of the switchgear.
+
+## What it does
+
+It provides the input, and just as importantly it returns information. Forces at the tyre contact patch travel back up through the <Part id="suspension.tie_rod" />, the <Part id="suspension.steering_rack" /> and the column to the rim, telling the driver how much grip is available. Preserving that feedback while filtering out kickback from potholes is the central difficulty of steering design, and it is why the <Part id="suspension.eps_motor" /> tuning matters so much.
+
+Its diameter sets the leverage. A larger wheel reduces effort but takes more arm movement; a smaller one is quicker but heavier.
+
+It contains the driver airbag, which means a clock spring — a coiled flat ribbon cable — carries the airbag, horn and switch circuits across the rotating joint without a slip ring.
+
+The column collapses telescopically in a frontal impact so the wheel does not travel back towards the driver.
+
+<Warning>
+Pyrotechnic airbag module. Never work on the wheel or clock spring without following the manufacturer's disconnection and waiting procedure.
+</Warning>
+
+## How it fails
+
+Clock spring failure, which disables the horn, airbag and wheel controls at once.
+
+## How it is serviced
+
+Not a service item. Alignment of the wheel to straight-ahead is set during suspension alignment.

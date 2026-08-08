@@ -1,0 +1,28 @@
+---
+title: HV contactor
+component: electrical.contactor
+system: electrical
+review: draft
+---
+
+A heavy relay inside the battery pack that connects the cells to the rest of the vehicle. When it is open, the vehicle's high-voltage cabling is dead.
+
+## What it does
+
+It is the pack's main switch, and it is deliberately normally open: it takes a continuous coil current to hold it closed, so any loss of control power, any crash signal, any fault detected by the <Part id="electrical.bms" /> drops it open by default. Failure and safety point the same way.
+
+Switching hundreds of amps of DC is harder than it sounds. Alternating current helps a relay by passing through zero a hundred times a second, giving any arc a chance to extinguish. DC never does, so a DC arc will happily sustain itself and weld the contacts. Traction contactors counter this with gas-filled sealed chambers and magnetic arc blow-outs.
+
+There is also a pre-charge circuit. Closing straight onto the inverter's empty capacitors would draw an enormous inrush and weld the contacts, so a resistor path charges them first, and only then does the main contactor close.
+
+<Warning>
+High voltage. A welded contactor means the pack cannot be isolated electrically.
+</Warning>
+
+## How it fails
+
+Contact welding and coil failure.
+
+## How it is serviced
+
+Not serviceable.

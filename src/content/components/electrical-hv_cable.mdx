@@ -1,0 +1,28 @@
+---
+title: High-voltage cable
+component: electrical.hv_cable
+system: electrical
+review: draft
+---
+
+Heavy shielded conductors carrying several hundred volts between the pack, the <Part id="electrical.inverter" />, the compressor and the charger. Sheathed bright orange by international convention.
+
+## What it does
+
+It carries current that would be lethal on contact, so its construction is as much about containment as conduction. The conductor is surrounded by thick insulation rated well above working voltage, then by a braided metal shield, then by the orange outer sheath.
+
+The shield is not for safety alone. The inverter switches large currents thousands of times a second, which radiates electromagnetic interference that would swamp radio reception and disturb sensitive electronics. The braid contains it and is bonded to the vehicle body at both ends.
+
+Every high-voltage connector also carries a pilot interlock loop: a small low-voltage circuit routed through the connector that breaks before the main contacts separate. The instant it opens, the <Part id="electrical.bms" /> opens the contactors, so the main pins are never parted under load.
+
+<Warning>
+Never cut, probe, repair or bypass an orange cable. There is no safe informal way to work on one. Isolation, waiting for capacitor discharge, and proving dead with an instrument are mandatory, and this app is not a service manual.
+</Warning>
+
+## How it fails
+
+Chafing and rodent damage, which the insulation monitoring detects as a fall in isolation resistance.
+
+## How it is serviced
+
+Inspected visually only.

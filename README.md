@@ -21,14 +21,15 @@ npm install
 npm run dev
 ```
 
-Requires Node 20 or newer. The app runs at `http://localhost:5173`.
+Requires Node 20 or newer. For the browser tests, install the browser once with
+`npx playwright install chromium`. The app runs at `http://localhost:5173`.
 
 | Command | What it does |
 | --- | --- |
 | `npm run dev` | Dev server with hot reload |
 | `npm run build` | Validate, typecheck, bundle, then check payload budgets |
 | `npm test` | Unit tests (Vitest) |
-| `npm run test:e2e` | Browser smoke tests (Playwright) |
+| `npm run test:e2e` | Browser smoke tests (Playwright) — run `npx playwright install chromium` once first |
 | `npm run validate` | Registry, node-binding and lesson-content validation |
 | `npm run budgets` | Payload budget gate against `dist/` |
 | `npm run typecheck` | TypeScript only |
@@ -133,7 +134,12 @@ the ADAS lessons.
 `review: reviewed` and names a reviewer with a mechanic's or automotive-engineering background.
 Everything else renders behind a visible draft badge, and `npm run validate` reports the split on
 every build. Plausible-sounding wrong explanations are worse than no explanation in a teaching
-product.
+product, so full coverage is a starting point for review rather than a finished deliverable.
+
+Region-specific material is tagged rather than woven into the prose. A `<Market region="Thailand">`
+block carries facts that genuinely differ by market — E20 gasohol and B7/B20 biodiesel
+compatibility, the Euro 5 diesel standard from January 2024, tropical service intervals, flood and
+humidity exposure — so another launch market can swap those blocks without rewriting the lesson.
 
 Spec figures carry a `SourceRef`. Where a number is a class-typical figure rather than a manufacturer
 one, the Inspector says so. Manufacturer specifications are never invented.
@@ -150,18 +156,17 @@ the app is a teaching aid and not a service manual.
 | Archetypes | 8 |
 | Catalogue | 50 models across 13 brands, 63 trims |
 | Flow paths | 15 definitions, resolved per configuration |
-| Lessons | 38 component lessons, 4 guided tours — **0 technically reviewed** |
-| Tests | 134 unit tests, plus a Playwright smoke suite |
+| Lessons | 175 component lessons (100% coverage), 4 guided tours — **0 technically reviewed** |
+| Tests | 134 unit tests, 10 Playwright browser tests |
 | Shell payload | ~0.53 MB gzip, against a 6 MB desktop / 3.5 MB mobile budget |
 
 ### Known gaps
 
 - No commissioned 3D assets; geometry is parametric and representative.
-- 38 of 175 components have written lessons, and none has passed technical review.
+- Every component has a lesson, but **none has passed technical review**. Coverage is not the same
+  as correctness, and the draft badge stays until a qualified reviewer signs each one off.
 - Published dimensions verified for 10 of 50 models.
-- Thai localisation covers the chrome, system names and safety copy; the rest falls back to English
-  rather than shipping an unreviewed translation of safety text.
-- The Playwright suite is wired into CI but has not been run locally.
+- Thai localisation covers the chrome, system names and safety copy; lesson prose is English only.
 
 ## Legal
 
