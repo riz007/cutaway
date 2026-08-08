@@ -1,0 +1,28 @@
+---
+title: Front airbag module
+component: safety_adas.airbag_front
+system: safety_adas
+review: draft
+---
+
+An airbag is a gas generator, a folded fabric bag, and a cover designed to split. From the moment the <Part id="safety_adas.crash_sensor" /> confirms an impact, the whole sequence is over in about fifty milliseconds.
+
+## What it does
+
+It works on the same principle as the <Part id="structure.crumple_box" />: extend the distance over which the occupant decelerates. The car's structure slows the vehicle; the belt and the airbag slow the person, and without them a body carries on at the pre-impact speed until it meets the steering wheel.
+
+Order matters. The <Part id="safety_adas.pretensioner" /> fires first, pulling slack out of the belt so the occupant is already coupled to the car. The bag then inflates and, crucially, begins venting immediately. It is not a cushion to bounce off; it is a device that absorbs energy as it deflates.
+
+Modern modules are multi-stage, choosing inflation force from crash severity, seat position and belt status.
+
+<Warning>
+Pyrotechnic. The module contains an explosive charge that deploys violently and can be triggered by static discharge or applied voltage. Never probe, apply power to, or apply heat to an airbag connector, and never work on the system without disconnecting the battery and observing the manufacturer's waiting period.
+</Warning>
+
+## How it fails
+
+Squib circuit and connector faults are the common ones, reported by the airbag warning lamp. A lit lamp means the system may not deploy.
+
+## How it is serviced
+
+Not user-serviceable. Deployed modules are replaced, never repacked, and removed units are handled as explosive articles.

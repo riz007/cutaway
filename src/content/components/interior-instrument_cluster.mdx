@@ -1,0 +1,28 @@
+---
+title: Instrument cluster
+component: interior.instrument_cluster
+system: interior
+review: draft
+---
+
+A modern cluster measures almost nothing itself. It is a display for data other modules have already produced.
+
+## What it does
+
+Road speed comes from the <Part id="braking.wheel_speed_sensor" /> signals via the <Part id="braking.abs_modulator" />. Engine speed and coolant temperature come from the <Part id="electrical.ecu_engine" />. Fuel level is one of the few things it may still read directly. All of it arrives over the <Part id="electrical.can_bus" />.
+
+Warning lamps follow a colour convention worth knowing. Red means stop as soon as it is safe. Amber means a fault that needs attention but is not immediately dangerous. Green and blue are simply status.
+
+<Note>
+The coolant temperature gauge in most cars is deliberately damped. It sits at the middle of its range across a wide band of actual temperatures, so a driver does not worry about normal variation. The consequence is that by the time the needle visibly moves, the situation is already serious.
+</Note>
+
+The oil pressure lamp is the one that is not damped. It is a switch, not a gauge, and it means the <Part id="lubrication.oil_pump" /> is no longer maintaining the film the bearings ride on. Continuing to drive destroys the engine in under a minute.
+
+## How it fails
+
+Backlight and stepper motor faults on older units, and software or bus faults on newer ones.
+
+## How it is serviced
+
+Not a service item. Replacement units generally require mileage and immobiliser data to be transferred by a dealer tool.

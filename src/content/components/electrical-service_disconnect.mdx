@@ -1,0 +1,28 @@
+---
+title: Service disconnect plug
+component: electrical.service_disconnect
+system: electrical
+review: draft
+---
+
+A manual plug, usually bright orange, that physically breaks the high-voltage battery into two halves. It exists for exactly one reason: so a person can make the pack safe with their own hands and see that they have done it.
+
+## What it does
+
+The pack is a long series string. Removing the disconnect opens that string near its midpoint, so neither remaining half is at a lethal potential, and no current can flow through the pack at all.
+
+It is a mechanical interlock, not a software one. That distinction is the whole point — the <Part id="electrical.contactor" /> is opened by the <Part id="electrical.bms" />, which is a computer, and a computer can fail or be commanded wrongly. A plug in a technician's pocket cannot.
+
+Most designs include a small interlock loop that signals its removal, so the vehicle knows to shut down cleanly, and a delay before the plug can be fully withdrawn so the contactors open under no load.
+
+<Warning>
+Removing the disconnect does not make the system safe on its own. Capacitors in the <Part id="electrical.inverter" /> hold charge for several minutes, and the correct procedure is always to isolate, wait, and then prove the circuit dead with an instrument before touching anything. This app is a teaching aid, not a service manual, and high-voltage work requires specific training and protective equipment.
+</Warning>
+
+## How it fails
+
+Corrosion of its contacts and damage to the interlock circuit, both of which will keep the vehicle from entering ready mode.
+
+## How it is serviced
+
+Only as part of a documented high-voltage isolation procedure.

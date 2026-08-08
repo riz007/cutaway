@@ -1,0 +1,24 @@
+---
+title: Spark plug
+component: powertrain.spark_plug
+system: powertrain
+review: draft
+---
+
+A spark plug does one thing: it puts a spark of a few tens of kilovolts in a precise place at a precise moment, in an environment that is hot, high pressure and chemically hostile.
+
+## What it does
+
+The <Part id="electrical.ignition_coil" /> steps 12 volts up to enough voltage to jump the plug gap. That gap is a few tenths of a millimetre, but under compression the air in it resists far more than it would at atmospheric pressure — which is why the coil has to produce so much more voltage than it seems it should need.
+
+Timing is everything. The engine control unit fires the plug slightly before top dead centre, so that peak pressure arrives just after the piston starts down. How far before depends on load and speed, and getting it wrong in either direction costs power or causes knock.
+
+The plug's heat range matters too: it must run hot enough to burn off deposits and cool enough to avoid becoming an ignition source in its own right.
+
+## How it fails
+
+Electrodes erode with every spark, widening the gap until the coil can no longer bridge it reliably. The result is a misfire — rough running, a flashing engine light, and unburnt fuel reaching the <Part id="air.catalytic_converter" />, which is what turns a cheap problem into an expensive one.
+
+## How it is serviced
+
+Replaced on interval, typically around 100,000 km for iridium plugs and much sooner for copper. Always replaced as a full set.

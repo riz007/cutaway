@@ -1,0 +1,26 @@
+---
+title: High-voltage battery
+component: powertrain.hv_battery
+system: powertrain
+review: draft
+---
+
+The traction pack stores the energy that moves an electrified vehicle. On a dedicated electric platform it is also a structural member: a flat, sealed case bolted between the axles that stiffens the whole body and puts most of the vehicle's mass low and central.
+
+## What it does
+
+Hundreds of cells are wired in series to reach a working voltage of several hundred volts, and in parallel to reach the required capacity. The series arrangement is what makes the pack dangerous: the individual cells are unremarkable, but the string as a whole is well beyond the threshold at which current can cross a human body.
+
+The <Part id="electrical.bms" /> monitors every cell group's voltage and temperature and limits charge and discharge accordingly. <Part id="cooling.battery_chiller" /> holds the cells in their comfortable temperature band, because both cold and heat cost capacity and life.
+
+<Warning>
+High voltage. These components are only to be worked on by trained personnel with insulated tools and appropriate protective equipment. The <Part id="electrical.service_disconnect" /> must be removed and the system proven dead before anything is touched. This app is a teaching aid, not a service manual.
+</Warning>
+
+## How it fails
+
+Gradually, as capacity fade, which shows up as reduced range rather than a sudden failure. Individual module faults are possible and are usually diagnosed through cell-voltage imbalance reported by the BMS.
+
+## How it is serviced
+
+Coolant service on schedule. Beyond that, packs are diagnosed and repaired at module level by specialists, not disassembled roadside.

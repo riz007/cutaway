@@ -1,0 +1,28 @@
+---
+title: Turbocharger
+component: powertrain.turbocharger
+system: powertrain
+review: draft
+---
+
+A turbocharger recovers energy that would otherwise leave through the tailpipe and uses it to push more air into the engine. More air means more fuel can be burnt, which means more power from the same displacement.
+
+## What it does
+
+Exhaust gas from the <Part id="air.exhaust_manifold" /> spins a turbine wheel. On a shared shaft, a compressor wheel draws in fresh air and pressurises it. Compressing air heats it, and hot air is less dense, so the charge passes through the <Part id="air.intercooler" /> before reaching the <Part id="air.intake_manifold" />.
+
+A wastegate bleeds exhaust past the turbine once target boost is reached, which is how boost pressure is regulated rather than simply rising with engine speed.
+
+The shaft can exceed 150,000 rpm and runs in bearings fed by the <Part id="lubrication.oil_gallery" />. That oil is doing two jobs: separating the bearing surfaces and carrying away turbine heat.
+
+<Warning>
+The turbine housing glows in normal use. It is one of the hottest accessible surfaces on the vehicle and stays dangerous long after the engine stops.
+</Warning>
+
+## How it fails
+
+Almost always through oil. Coking from repeated hot shutdowns, an extended oil change interval, or a blocked drain will destroy the bearings. Symptoms are a rising whine, blue smoke, and oil in the intake tract.
+
+## How it is serviced
+
+No routine service beyond the engine oil it depends on. Letting a hard-worked engine idle briefly before shutdown lets oil carry heat out of the bearing housing.

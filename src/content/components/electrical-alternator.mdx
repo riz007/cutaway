@@ -1,0 +1,28 @@
+---
+title: Alternator
+component: electrical.alternator
+system: electrical
+review: draft
+---
+
+The alternator is the vehicle's generator. Contrary to a common belief, the battery does not run the car — the alternator does, once the engine is turning.
+
+## What it does
+
+A belt from the <Part id="powertrain.crankshaft" /> spins a rotor whose field winding is fed a controlled current. The rotating magnetic field induces three-phase alternating current in the stator windings, which a built-in rectifier converts to direct current.
+
+Output is regulated not by changing speed but by changing the field current. That is how a device spinning anywhere between 1,500 and 15,000 rpm holds its output at a steady 14.4 volts or so. The regulator raises the field when load rises and cuts it back when the <Part id="electrical.battery_12v" /> is charged.
+
+<Note>
+Step through the ignition positions in the electrical scenario and watch the load total. At rest the car draws a few amps; switch on headlights, blower and the cooling fan and it is drawing more than most people expect. The alternator has to cover all of it and still put charge back into the battery.
+</Note>
+
+Electrified vehicles have no alternator. A <Part id="electrical.dcdc_converter" /> steps high voltage down to 12 volts instead, which is more efficient and works with the engine off.
+
+## How it fails
+
+Worn brushes, failed diodes in the rectifier — which leaves alternating current on the 12 volt system and produces strange electrical symptoms — and bearing wear.
+
+## How it is serviced
+
+Belt condition and tension inspected at service. The unit itself is replaced rather than repaired.

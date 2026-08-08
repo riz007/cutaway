@@ -1,0 +1,28 @@
+---
+title: CAN bus
+component: electrical.can_bus
+system: electrical
+review: draft
+---
+
+Before networking, every signal in a car needed its own wire from sensor to consumer. CAN replaced that with two twisted wires that every module shares.
+
+## What it does
+
+CAN is a broadcast network. A module does not address a message to a recipient; it puts a message with an identifier onto the bus, and every module that cares about that identifier reads it. Wheel speed goes out once and is used by the <Part id="braking.abs_modulator" />, the <Part id="interior.instrument_cluster" />, the transmission controller and the cruise control simultaneously.
+
+The physical layer is a differential pair: CAN-high and CAN-low move in opposite directions, and receivers read the difference. Any electrical noise picked up affects both wires equally and cancels out, which is why a two-wire bus survives running alongside an ignition system.
+
+Arbitration is elegant. If two modules transmit at once, the one with the numerically lower identifier wins and the other backs off and retries, with no collision and no lost time. Safety-critical messages are given low identifiers, so they are inherently prioritised.
+
+<Note>
+This is also why modern diagnostics work at all. A scan tool is simply another node listening to and asking questions on the same network.
+</Note>
+
+## How it fails
+
+A single break or short can take the whole bus down and produce dozens of unrelated-looking fault codes at once. Corroded connectors and rodent damage are the usual causes.
+
+## How it is serviced
+
+Nothing routine. Diagnosis is by resistance measurement across the pair and by oscilloscope.

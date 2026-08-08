@@ -1,0 +1,26 @@
+---
+title: ABS / ESC modulator
+component: braking.abs_modulator
+system: braking
+review: draft
+---
+
+The modulator sits between the master cylinder and the wheels and can independently lower, hold or raise the pressure at each corner, many times per second. Everything modern chassis control does passes through it.
+
+## What it does
+
+Each wheel circuit has an inlet and an outlet solenoid valve. To reduce pressure at a locking wheel, the inlet closes and the outlet opens, dumping fluid into an accumulator. To restore it, a pump pushes that fluid back. The pulsing a driver feels through the pedal during an ABS stop is that cycle happening under their foot.
+
+The inputs are the four <Part id="braking.wheel_speed_sensor" /> signals, plus the <Part id="safety_adas.yaw_sensor" /> and a steering angle sensor. From those the controller knows not only whether a wheel is locking but whether the car is rotating more or less than the driver asked for.
+
+<Note>
+The same hardware provides anti-lock braking, traction control, stability control, hill-hold and the braking part of adaptive cruise. It is one actuator serving many features, which is why a single fault illuminates several warning lights at once.
+</Note>
+
+## How it fails
+
+Solenoid or pump-motor faults, usually reported with a specific code, and corrosion of the connector. The fallback is always plain hydraulic braking: the valves default open, so the driver keeps normal, unassisted-by-electronics brakes.
+
+## How it is serviced
+
+Fluid changes on schedule. Bleeding usually requires a scan tool to cycle the valves, because fluid trapped in the modulator will not come out otherwise.

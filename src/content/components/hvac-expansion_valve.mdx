@@ -1,0 +1,28 @@
+---
+title: Expansion valve
+component: hvac.expansion_valve
+system: hvac
+review: draft
+---
+
+The expansion valve is where air conditioning actually becomes cold. Everything before it is preparation; everything after it is collecting the benefit.
+
+## What it does
+
+The <Part id="hvac.compressor" /> raises the refrigerant to high pressure and high temperature. The <Part id="hvac.condenser" /> then rejects that heat to outside air, and the refrigerant condenses to a warm high-pressure liquid.
+
+At the expansion valve, that liquid is forced through a small orifice into a much lower pressure. A liquid at lower pressure boils at a lower temperature, so part of it flashes to vapour immediately, and boiling absorbs latent heat. The refrigerant leaving the valve is a cold mixture of liquid and vapour — often close to freezing — and it is the pressure drop, not the compressor, that produced the cold.
+
+That cold mixture then boils fully in the <Part id="hvac.evaporator" />, absorbing heat from cabin air.
+
+<Note>
+Air conditioning does not create cold. It moves heat from inside the cabin to outside the car, and the compressor's work is what makes the heat move against its natural direction. A <Part id="hvac.heat_pump" /> is the same loop run the other way round.
+</Note>
+
+## How it fails
+
+Blocked by debris or by moisture freezing at the orifice — which is why the receiver-drier's desiccant matters. A stuck valve gives poor cooling with abnormal pressures on both sides.
+
+## How it is serviced
+
+Not serviced individually. Any system opened to atmosphere is evacuated and recharged by weight, and the drier is replaced.

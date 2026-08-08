@@ -1,0 +1,28 @@
+---
+title: Mass airflow sensor
+component: air.maf_sensor
+system: air
+review: draft
+---
+
+Fuelling is a ratio problem. To burn petrol completely you need roughly 14.7 parts of air by mass to one of fuel, so before the engine can decide how much fuel to inject it needs to know how much air is actually arriving.
+
+## What it does
+
+The common design is a hot-wire sensor. A small element is held at a fixed temperature above ambient by an electrical current. Air flowing past cools it, and the current required to maintain the temperature rises with mass flow. That current is the measurement.
+
+Measuring mass rather than volume is the important part. A given volume of cold, dense air at sea level contains far more oxygen than the same volume of hot air in the mountains, and only the mass tells the <Part id="electrical.ecu_engine" /> how much fuel that air can actually burn.
+
+The signal sets the base injector pulse width, which the <Part id="air.o2_sensor" /> then trims in closed loop.
+
+<Note>
+This is why an air leak after the sensor causes a lean condition. Air entering downstream is never measured, so it never gets its share of fuel.
+</Note>
+
+## How it fails
+
+Contamination. Oil from an over-oiled aftermarket filter, or dust past a poorly sealed one, coats the element and insulates it. The sensor then under-reads, the engine runs lean, and the symptoms are hesitation and poor economy long before a fault code appears.
+
+## How it is serviced
+
+Keep the <Part id="air.air_filter" /> and its housing sealed and clean. The element itself can be cleaned with a dedicated solvent, never touched.

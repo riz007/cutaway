@@ -1,0 +1,26 @@
+---
+title: Heater core
+component: cooling.heater_core
+system: cooling
+review: draft
+---
+
+Cabin heat in a combustion vehicle is free. The heater core is a small radiator buried in the dashboard that taps the engine's coolant loop and gives some of that waste heat to the people in the car.
+
+## What it does
+
+Hot coolant is routed from the engine through the core. The <Part id="hvac.blower" /> pushes cabin air across its fins, and a blend flap decides how much of the airflow passes through it versus bypassing it. That flap, not a coolant valve, is what sets cabin temperature on most modern cars — which is why the heat responds instantly.
+
+<Note>
+This is the clearest cross-system dependency in the vehicle: a part in the climate system, fed by the cooling system, warmed by the engine. If the <Part id="cooling.thermostat" /> is stuck open, the first complaint is usually weak cabin heat, not an engine problem.
+</Note>
+
+Battery-electric vehicles have no waste heat to spare, which is why they use a resistive heater or, more efficiently, a <Part id="hvac.heat_pump" />, and why cabin heating costs real range.
+
+## How it fails
+
+Internal corrosion leads to leaks, and because the core sits inside the HVAC case, the symptoms are a sweet smell, a greasy film on the inside of the windscreen and damp carpets. Sludge from neglected coolant can block the narrow tubes and give lukewarm output.
+
+## How it is serviced
+
+Nothing routine. Replacement usually means removing the dashboard, which is why it is one of the most labour-expensive small parts on the car.

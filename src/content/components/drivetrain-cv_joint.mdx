@@ -1,0 +1,26 @@
+---
+title: Constant-velocity joint
+component: drivetrain.cv_joint
+system: drivetrain
+review: draft
+---
+
+A front-wheel-drive car has to send torque to a wheel that is simultaneously steering and moving up and down. A simple universal joint would do it, but not smoothly.
+
+## What it does
+
+A universal joint at an angle does not transmit rotation evenly — the output speeds up and slows down twice per revolution. At a steering wheel's worth of angle that would be felt as a violent vibration.
+
+A constant-velocity joint solves it geometrically. Six steel balls sit in curved grooves, held by a cage that always bisects the angle between input and output shafts. Because the contact points stay in that bisecting plane, the output turns at exactly the same speed as the input regardless of angle.
+
+The outer joint, at the wheel, handles large steering angles. The inner joint is usually a tripod design that also slides, accommodating the length change as the suspension moves through its travel.
+
+Everything depends on the rubber boot. Inside is packed grease; outside is road grit and water.
+
+## How it fails
+
+Almost always through a split boot. Grease escapes, contamination enters, and the hardened surfaces wear. The classic symptom is rhythmic clicking on full lock under power — one click per wheel revolution.
+
+## How it is serviced
+
+Boots are inspected at every service. A boot replaced promptly costs very little; a boot ignored for a few thousand kilometres costs a driveshaft.

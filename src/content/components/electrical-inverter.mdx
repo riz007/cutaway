@@ -1,0 +1,28 @@
+---
+title: Traction inverter
+component: electrical.inverter
+system: electrical
+review: draft
+---
+
+The inverter is what actually controls an electric vehicle. The motor is a fairly simple machine; the intelligence is here.
+
+## What it does
+
+The <Part id="powertrain.hv_battery" /> supplies direct current. An AC motor needs three-phase alternating current, at a frequency and amplitude that match the speed and torque being demanded. The inverter synthesises that from DC using six power transistors switching thousands of times per second, chopping the DC into pulses whose average traces out a sine wave.
+
+Because it controls the phase of the current relative to the rotor position, it controls torque directly and almost instantly — far faster than any combustion engine can respond. That is the source of the immediate response an EV has.
+
+It is bidirectional. Under regeneration it works in reverse, rectifying the current the motor generates back into the pack, which is what makes <Part id="braking.regen_blending" /> possible.
+
+<Warning>
+High voltage, and its capacitors hold a dangerous charge for minutes after the vehicle is shut down and the <Part id="electrical.service_disconnect" /> is removed. Only trained personnel with the correct equipment should open one.
+</Warning>
+
+## How it fails
+
+Power module failure, usually thermal, and coolant ingress. Both are workshop-level diagnoses.
+
+## How it is serviced
+
+Its cooling loop is serviced with the rest of the thermal system. The unit itself is not user-serviceable.

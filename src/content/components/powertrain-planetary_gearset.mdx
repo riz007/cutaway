@@ -1,0 +1,28 @@
+---
+title: Power-split planetary gearset
+component: powertrain.planetary_gearset
+system: powertrain
+review: draft
+---
+
+This single gearset is the whole idea behind a series-parallel hybrid. There is no clutch, no torque converter, and no set of gear ratios to shift between — and yet the engine can run at whatever speed suits it while the wheels turn at whatever speed the road demands.
+
+## What it does
+
+Three elements are mechanically tied together: the sun gear connects to <Part id="powertrain.mg1" />, the planet carrier connects to the engine, and the ring gear connects to <Part id="powertrain.mg2" /> and, through a fixed reduction, to the wheels.
+
+The defining property of a planetary set is that these three speeds are not independent. Fix any two and the third follows. So if the wheels are turning at some speed, the controller can choose the engine speed it wants simply by commanding MG1 to spin at the corresponding speed. The engine is decoupled from road speed without a single clutch.
+
+<Note>
+This is why a hybrid engine sometimes seems to hold a constant speed while the car accelerates. It is not slipping. It is being held at its efficient operating point while MG1 absorbs the difference.
+</Note>
+
+MG1 generates electricity while doing this. That power goes either to MG2 to help drive the wheels, or into the <Part id="powertrain.hv_battery" />.
+
+## How it fails
+
+Very seldom. It is a small number of hardened gears under modest load, running in its own oil. The electronics and the pack age long before the gearset does.
+
+## How it is serviced
+
+Transaxle fluid changes on the manufacturer's schedule. Nothing else.

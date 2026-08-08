@@ -1,0 +1,24 @@
+---
+title: Fuel injector
+component: fuel.injector
+system: fuel
+review: draft
+---
+
+An injector is a fast, precise solenoid valve. Its whole purpose is to open for an exact number of milliseconds and atomise fuel into a fine, well-distributed spray.
+
+## What it does
+
+The <Part id="fuel.fuel_rail" /> holds fuel at a known pressure. With pressure fixed, the mass of fuel delivered depends only on how long the valve is open, so the <Part id="electrical.ecu_engine" /> controls fuelling by controlling pulse width — often as short as one and a half milliseconds at idle.
+
+The nozzle matters as much as the timing. Fuel has to be broken into droplets small enough to evaporate and mix with air in the fraction of a second available. Poor atomisation means unburnt fuel, which means wasted energy and a hard life for the <Part id="air.catalytic_converter" />.
+
+Direct-injection engines put the injector in the combustion chamber itself at pressures over 200 bar, which allows charge cooling and stratified running but exposes the nozzle tip to combustion.
+
+## How it fails
+
+Deposits on the nozzle distort the spray pattern long before they block it, which shows up as a rough idle and a lean misfire on one cylinder. Electrical failure of the winding is less common and more obvious.
+
+## How it is serviced
+
+Not routine. Clean fuel and a maintained <Part id="fuel.fuel_filter" /> are the real service. Injectors can be ultrasonically cleaned and flow-tested when a cylinder-specific fault is confirmed.

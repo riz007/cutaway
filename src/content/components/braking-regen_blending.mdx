@@ -1,0 +1,26 @@
+---
+title: Regenerative braking blend unit
+component: braking.regen_blending
+system: braking
+review: draft
+---
+
+In an electrified vehicle, most everyday braking is done by the motor, not the pads. Something has to decide, continuously, how much retardation comes from each — and make the changeover invisible to the driver's foot.
+
+## What it does
+
+When the driver asks for deceleration, the controller first works out how much of it <Part id="powertrain.mg2" /> can provide as generation. That amount is limited by three things: motor speed, because regeneration fades away as the car approaches a standstill; pack state of charge, because a full battery cannot accept current; and pack temperature, because a cold battery cannot either.
+
+Whatever the motor cannot supply, the <Part id="braking.abs_modulator" /> makes up with hydraulic pressure at the calipers. The total has to match what the pedal asked for at every instant, while the split underneath shifts continuously.
+
+<Note>
+This is why friction brakes on hybrids and EVs often last far longer, and also why they can seize from underuse — the discs rarely get hot enough to shed surface rust.
+</Note>
+
+## How it fails
+
+Rarely as hardware. What drivers notice is behaviour: reduced regeneration and a longer pedal on a cold morning or with a full battery. That is the blend working correctly, not a fault.
+
+## How it is serviced
+
+Standard brake fluid intervals. Because the friction brakes see light use, inspect for corrosion rather than for wear.

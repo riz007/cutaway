@@ -1,0 +1,28 @@
+---
+title: How a power-split hybrid works
+system: powertrain
+review: draft
+steps:
+  - title: No gearbox, no clutch
+    body: A series-parallel hybrid has no gear ratios to shift and no clutch to slip. Everything is done by one planetary gearset and two electric machines.
+    system: powertrain
+    focus: powertrain.planetary_gearset
+  - title: Three shafts, two degrees of freedom
+    body: The engine, MG1 and MG2 are mechanically tied. Fix any two speeds and the third follows. So the controller can choose the engine speed it wants regardless of road speed.
+    system: powertrain
+    focus: powertrain.mg1
+  - title: Driving on electricity alone
+    body: At light load and low speed the engine stops entirely and MG2 drives the wheels from the battery. Set a small throttle and watch the hybrid mode readout.
+    system: powertrain
+    focus: powertrain.mg2
+  - title: Recovering energy
+    body: Lift off or brake and MG2 becomes a generator. Watch the pack power go negative and the regen share rise. Friction brakes only make up the difference.
+    system: braking
+    focus: braking.regen_blending
+  - title: The pack
+    body: All of that energy passes through the high-voltage battery, which is small on a full hybrid - about a kilowatt hour - because it is a buffer, not a fuel tank.
+    system: powertrain
+    focus: powertrain.hv_battery
+---
+
+Why a hybrid engine sometimes holds a steady speed while the car accelerates, and where the energy actually goes.

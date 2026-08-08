@@ -1,0 +1,28 @@
+---
+title: Electric power steering motor
+component: suspension.eps_motor
+system: suspension_steering
+review: draft
+---
+
+Electric power steering replaced hydraulics for a simple reason: a hydraulic pump runs constantly and consumes engine power whether or not the driver is steering. An electric motor draws current only when asked.
+
+## What it does
+
+A torque sensor on the steering column measures how hard the driver is twisting the wheel. A controller reads that, along with road speed from the CAN bus, and commands an electric motor to add assistance torque to the <Part id="suspension.steering_rack" />.
+
+Because assistance is a software function of speed and driver torque rather than a fixed hydraulic characteristic, it can be light at parking speeds and firm on the motorway. That is far harder to achieve with a pump.
+
+<Note>
+Once steering is an electric actuator that can be commanded, lane-keeping assistance, self-parking and evasive steering support all become software features on existing hardware. The same is true of braking once the <Part id="braking.abs_modulator" /> can build pressure on its own. Almost every driver-assistance feature exists because a mechanical linkage became an actuator.
+</Note>
+
+Fail-safe behaviour matters here: if the system faults, assistance is removed but the mechanical column remains, so the car is heavy to steer, not unsteerable.
+
+## How it fails
+
+Torque sensor faults, motor position sensor faults, and connector corrosion. The symptom is a warning lamp and sudden loss of assistance.
+
+## How it is serviced
+
+Nothing routine. Calibration of the steering angle sensor is required after alignment or suspension work.
