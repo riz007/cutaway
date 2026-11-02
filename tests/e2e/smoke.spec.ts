@@ -7,6 +7,9 @@ const partTree = (page: import('@playwright/test').Page) => page.getByRole('regi
 
 const transport = (page: import('@playwright/test').Page) => page.locator('section[aria-label="Simulation"]');
 
+const explodeSlider = (page: import('@playwright/test').Page) =>
+  page.locator('section[aria-label="Explode timeline"] [role="slider"]');
+
 async function engineRpm(page: import('@playwright/test').Page): Promise<number> {
   const text = await transport(page).innerText();
   const match = /engine speed\s*([\d.]+)/i.exec(text.replace(/\n/g, ' '));
@@ -67,7 +70,7 @@ test.describe('cutaway', () => {
   test('starting the simulation turns the engine over', async ({ page }) => {
     await page.goto('/v/toyota-hilux');
 
-    await expect.poll(() => engineRpm(page)).toBe(0);
+    await expect(transport(page).getByText(/engine speed/i)).toBeHidden();
 
     await transport(page).getByRole('button', { name: /Play/ }).click();
 
@@ -85,8 +88,33 @@ test.describe('cutaway', () => {
 
     await expect(ignitionOn).toHaveAttribute('aria-checked', 'true');
 
-    await page.getByRole('tab', { name: 'View' }).click();
-    await expect(page.getByRole('switch', { name: 'Cutaway' })).toBeChecked();
+    await expect(page.getByRole('button', { name: 'Cutaway' })).toHaveAttribute('aria-pressed', 'true');
+  });
+
+  test('assembles each vehicle on arrival and can be skipped', async ({ page }) => {
+    await page.goto('/v/toyota-hilux');
+
+    const skip = page.getByRole('button', { name: 'Skip' });
+    await expect(page.getByText(/Assembling the .*Hilux/)).toBeAttached();
+    await skip.click();
+
+    await expect(skip).toBeHidden();
+    await expect(explodeSlider(page)).toHaveAttribute('aria-valuetext', /^0 of \d+ pieces separated$/);
+  });
+
+  test('explodes the vehicle layer by layer and puts it back', async ({ page }) => {
+    await page.goto('/v/toyota-hilux');
+    await expect(page.getByRole('button', { name: 'Skip' })).toBeHidden({ timeout: 30_000 });
+
+    await page.getByRole('button', { name: 'Explode the vehicle' }).click();
+    await expect(explodeSlider(page)).toHaveAttribute('aria-valuetext', /^(\d+) of \1 pieces separated$/, {
+      timeout: 20_000,
+    });
+
+    await page.getByRole('button', { name: 'Reassemble the vehicle' }).click();
+    await expect(explodeSlider(page)).toHaveAttribute('aria-valuetext', /^0 of \d+ pieces separated$/, {
+      timeout: 20_000,
+    });
   });
 
   test('space toggles playback', async ({ page }) => {

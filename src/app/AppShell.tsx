@@ -8,6 +8,9 @@ import { Inspector } from '@/ui/Inspector/Inspector';
 import { ViewControls } from '@/ui/Controls/ViewControls';
 import { SimulationPanel } from '@/ui/Controls/SimulationPanel';
 import { TransportBar } from '@/ui/Controls/TransportBar';
+import { ExplodeBar } from '@/ui/Controls/ExplodeBar';
+import { CanvasToolbar } from '@/ui/Controls/CanvasToolbar';
+import { IntroOverlay } from '@/ui/Controls/IntroOverlay';
 import { LessonPlayer } from '@/ui/Lessons/LessonPlayer';
 import { VehiclePicker } from '@/ui/VehiclePicker/VehiclePicker';
 import { TextAnatomy } from '@/ui/Fallback/TextAnatomy';
@@ -149,10 +152,13 @@ export function AppShell() {
               </div>
             </aside>
 
-            <div className="relative min-h-0">
+            <div className="relative min-h-0 overflow-hidden">
               <SceneCanvas />
+              <CanvasToolbar />
+              <IntroOverlay />
 
               <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 flex flex-col gap-1.5 p-3">
+                <ExplodeBar />
                 <TransportBar />
                 <p className="px-1 text-center text-2xs leading-relaxed text-subtle">
                   {t('app.disclaimer.short')}

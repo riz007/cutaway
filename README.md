@@ -36,12 +36,17 @@ Requires Node 20 or newer. For the browser tests, install the browser once with
 
 ## Using it
 
-- **Pick a vehicle** from the header, then choose a powertrain trim.
+- **Pick a vehicle** from the header, then choose a powertrain trim. Each vehicle arrives as a kit
+  and assembles itself, chassis first and glass last; `Skip` jumps straight to the finished car.
 - **Press Play** in the transport bar. That switches the ignition on and ghosts the bodywork so the
   moving parts are visible. Open the throttle and select `D` to get the car rolling.
 - **Click any part** in the 3D view or the parts tree to open its lesson, specifications and
   cross-system links. Double-click to focus the camera on it.
 - **Isolate a system** from the left rail to strip the view down to one circuit.
+- **Explode the car** with the timeline under the view. Parts separate in four layers (body, cabin,
+  systems, chassis) with a running piece count; press the play button to sweep it automatically.
+- **Orbit** by dragging, or use the on-canvas pad. The toolbar above the view switches between
+  Realistic, Schematic and X-ray, toggles the cutaway, and starts a slow turntable.
 
 ### Keyboard
 
@@ -49,6 +54,8 @@ Requires Node 20 or newer. For the browser tests, install the browser once with
 | --- | --- |
 | `Space` | Start / stop the simulation |
 | `1`–`7` | Camera presets: 3/4, front, side, top, engine bay, underneath, driver's seat |
+| `W` `A` `S` `D` / arrows | Orbit the camera (when the 3D view has focus) |
+| `+` / `−` | Zoom |
 | `Tab` / `Enter` | Move through every part and open it |
 | `Esc` | Leave focus mode |
 
@@ -97,13 +104,20 @@ come from published measurements, which are facts, rather than from copied desig
 Because the emitted node names match the glTF contract, a real `.glb` can replace a generated
 archetype one system at a time without touching anything downstream.
 
+**Rendering.** The studio lighting is built from in-scene light formers rather than a downloaded HDR,
+so the app works offline and under a strict CSP. Tone mapping is AgX. A performance monitor steps
+resolution and effects down on slow GPUs, the frame loop renders on demand, and picking uses
+`three-mesh-bvh` so hovering stays cheap with every part on screen.
+
 ## Simulation
 
 Deliberately kinematic and pedagogical, not physical. No rigid-body solver and no CFD — parts move on
 analytic relations parameterised by a few state variables, because the goal is a correct mental
 model, not numeric accuracy.
 
-- Exact slider-crank piston geometry, cam phasing and valve lift
+- A working crank train: every rod stays pinned between its crank throw and piston at all angles,
+  cylinders follow real firing orders (1-3-4-2 for inline fours, 120° spacing for triples), and each
+  cam lobe points at its valve at peak lift
 - Power-split planetary speed relation for series-parallel hybrids
 - EV torque envelope, pack state of charge and regeneration limits
 - Lumped coolant model with a wax thermostat and fan threshold
@@ -157,8 +171,8 @@ the app is a teaching aid and not a service manual.
 | Catalogue | 50 models across 13 brands, 63 trims |
 | Flow paths | 15 definitions, resolved per configuration |
 | Lessons | 175 component lessons (100% coverage), 4 guided tours — **0 technically reviewed** |
-| Tests | 134 unit tests, 10 Playwright browser tests |
-| Shell payload | ~0.53 MB gzip, against a 6 MB desktop / 3.5 MB mobile budget |
+| Tests | 145 unit tests, 12 Playwright browser tests |
+| Shell payload | ~0.57 MB gzip, against a 6 MB desktop / 3.5 MB mobile budget |
 
 ### Known gaps
 

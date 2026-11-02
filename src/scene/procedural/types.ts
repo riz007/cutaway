@@ -1,4 +1,5 @@
 import type { SystemId, Vec3 } from '@/domain/types';
+import type { BodyParams, BodyRegion } from './bodySurface';
 
 export type Shape =
   | { kind: 'box'; size: Vec3 }
@@ -9,7 +10,30 @@ export type Shape =
   | { kind: 'torus'; radius: number; tube: number }
   | { kind: 'capsule'; radius: number; length: number }
 
-  | { kind: 'profile'; points: [number, number][]; depth: number; bevel?: number; holes?: [number, number][][] };
+  | { kind: 'body'; params: BodyParams; region: BodyRegion }
+  | { kind: 'tyre'; radius: number; width: number; rimRadius: number }
+  | { kind: 'rim'; radius: number; width: number; spokes: number; face: 1 | -1 }
+  | {
+      kind: 'crankshaft';
+      throws: { station: number; angle: number }[];
+      throw: number;
+      journalRadius: number;
+      pinRadius: number;
+      span: number;
+    }
+  | {
+      kind: 'camshaft';
+      lobes: { station: number; angle: number }[];
+      radius: number;
+      lift: number;
+      span: number;
+    };
+
+export interface Kinematic {
+  pivot: Vec3;
+  bank: 'x' | 'z';
+  rise?: number;
+}
 
 export interface PartInstance {
   nodeId: string;
@@ -27,6 +51,7 @@ export interface PartInstance {
 
   instanceLabel?: string;
   lod: 0 | 1;
+  kinematic?: Kinematic;
 }
 
 export type MaterialKey =
@@ -41,6 +66,8 @@ export type MaterialKey =
   | 'painted_body'
   | 'chrome'
   | 'hv_orange'
+  | 'lamp'
+  | 'lamp_red'
   | 'fabric';
 
 export interface PartDef {
@@ -55,6 +82,7 @@ export interface PartDef {
 
   explode?: Vec3;
   lod?: 0 | 1;
+  kinematic?: Kinematic;
 }
 
 export interface BuiltScene {

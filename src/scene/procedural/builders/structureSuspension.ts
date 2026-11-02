@@ -1,5 +1,6 @@
 import type { PartDef } from '../types';
 import { ALONG_X, ALONG_Z, corners, type Layout } from '../layout';
+import { bodyProfile, type BodyRegion } from '../bodySurface';
 
 export function buildStructure(l: Layout): PartDef[] {
   const { g } = l;
@@ -99,23 +100,32 @@ export function buildStructure(l: Layout): PartDef[] {
     material: 'steel',
   });
 
+  const outline = bodyProfile(l.shell);
+  const pillarBase = outline(l.body.landmarks.zBonnetEnd + 0.04);
+  const pillarTop = outline(l.body.landmarks.zScreenTop + 0.02);
+  const pillarRun = pillarTop.z - pillarBase.z;
+  const pillarRise = pillarTop.edgeY - pillarBase.belt;
+  const pillarLength = Math.hypot(pillarRun, pillarRise) * 0.9;
+  const pillarLean = Math.atan2(pillarRun, pillarRise);
+  const pillarX = Math.min(pillarBase.beltWidth, pillarTop.edgeWidth);
+
   for (const side of [-1, 1] as const) {
     const label = side < 0 ? 'Left' : 'Right';
     parts.push({
       component: 'structure.a_pillar',
       variant: side < 0 ? 'l' : 'r',
       instanceLabel: label,
-      shape: { kind: 'box', size: [0.07, 0.78, 0.09] },
-      position: [side * hw * 0.82, (l.beltlineY + l.roofY) / 2, l.zFirewall + 0.42],
-      rotation: [-0.5, 0, 0],
+      shape: { kind: 'box', size: [0.06, pillarLength, 0.08] },
+      position: [side * (pillarX - 0.05), (pillarBase.belt + pillarTop.edgeY) / 2 - 0.03, (pillarBase.z + pillarTop.z) / 2],
+      rotation: [pillarLean, 0, 0],
       material: 'steel',
     });
     parts.push({
       component: 'structure.b_pillar',
       variant: side < 0 ? 'l' : 'r',
       instanceLabel: label,
-      shape: { kind: 'box', size: [0.07, l.roofY - sillY, 0.11] },
-      position: [side * hw * 0.86, (sillY + l.roofY) / 2, cabinMidZ],
+      shape: { kind: 'box', size: [0.07, l.roofY - sillY - 0.08, 0.11] },
+      position: [side * hw * 0.74, (sillY + l.roofY - 0.08) / 2, cabinMidZ],
       material: 'steel',
     });
     parts.push({
@@ -130,69 +140,61 @@ export function buildStructure(l: Layout): PartDef[] {
   }
 
   const lm = l.body.landmarks;
+  const profile = bodyProfile(l.shell);
 
+  const shell = (
+    component: 'structure.body_panel' | 'structure.glazing',
+    region: BodyRegion,
+    label: string,
+    explode: [number, number, number],
+  ): PartDef => ({
+    component,
+    variant: region,
+    instanceLabel: label,
+    shape: { kind: 'body', params: l.shell, region },
+    position: [0, 0, 0],
+    material: component === 'structure.glazing' ? 'glass' : 'painted_body',
+    explode,
+  });
+
+  parts.push(
+    shell('structure.body_panel', 'flank_l', 'Left flank', [-0.9, 0.1, 0]),
+    shell('structure.body_panel', 'flank_r', 'Right flank', [0.9, 0.1, 0]),
+    shell('structure.body_panel', 'hood', 'Hood', [0, 0.7, -0.45]),
+    shell('structure.body_panel', 'roof', 'Roof and pillars', [0, 1, 0]),
+    shell('structure.body_panel', 'front', 'Front fascia', [0, 0.1, -0.95]),
+    shell('structure.body_panel', 'rear', 'Rear fascia', [0, 0.1, 0.95]),
+    shell('structure.glazing', 'windscreen', 'Windscreen', [0, 0.75, -0.6]),
+    shell('structure.glazing', 'backlight', 'Rear screen', [0, 0.75, 0.6]),
+    shell('structure.glazing', 'side_l', 'Left side glass', [-1.1, 0.45, 0]),
+    shell('structure.glazing', 'side_r', 'Right side glass', [1.1, 0.45, 0]),
+  );
+  if (!l.shell.bed) parts.push(shell('structure.body_panel', 'deck', 'Boot lid', [0, 0.6, 0.6]));
+
+  const mirrorAt = profile(lm.zBonnetEnd + 0.16);
   for (const side of [-1, 1] as const) {
     parts.push({
       component: 'structure.body_panel',
-      variant: side < 0 ? 'flank_l' : 'flank_r',
-      instanceLabel: side < 0 ? 'Left flank' : 'Right flank',
-      shape: { kind: 'profile', points: l.body.points, holes: l.body.holes, depth: 0.055, bevel: 0.005 },
-      position: [side * (hw - 0.028), 0, 0],
+      variant: side < 0 ? 'mirror_l' : 'mirror_r',
+      instanceLabel: side < 0 ? 'Left mirror' : 'Right mirror',
+      shape: { kind: 'box', size: [0.17, 0.1, 0.09] },
+      position: [side * (mirrorAt.beltWidth + 0.07), mirrorAt.belt + 0.08, mirrorAt.z],
+      rotation: [0, side * 0.12, 0],
       material: 'painted_body',
-      explode: [side * 0.9, 0.1, 0],
+      explode: [side * 1.2, 0.5, -0.2],
     });
   }
 
-  const panel = (
-    variant: string,
-    label: string,
-    size: [number, number, number],
-    pos: [number, number, number],
-    rot?: [number, number, number],
-  ): PartDef => ({
+  const nose = profile(lm.zNose + 0.02);
+  parts.push({
     component: 'structure.body_panel',
-    variant,
-    instanceLabel: label,
-    shape: { kind: 'box', size },
-    position: pos,
-    ...(rot ? { rotation: rot } : {}),
-    material: 'painted_body',
+    variant: 'grille',
+    instanceLabel: 'Grille',
+    shape: { kind: 'box', size: [nose.width * 1.1, Math.max(0.08, (nose.top - nose.bottom) * 0.32), 0.04] },
+    position: [0, nose.bottom + (nose.top - nose.bottom) * 0.36, lm.zNose + 0.008],
+    material: 'plastic_black',
+    explode: [0, 0.05, -1.05],
   });
-
-  const bonnetRun = lm.zBonnetEnd - lm.zNose;
-  parts.push(
-    panel(
-      'hood',
-      'Hood',
-      [g.width * 0.9, 0.05, bonnetRun * 0.98],
-      [0, (lm.noseY + lm.bonnetY) / 2 + 0.015, lm.zNose + bonnetRun * 0.5],
-      [Math.atan2(lm.bonnetY - lm.noseY, bonnetRun), 0, 0],
-    ),
-  );
-  parts.push(
-    panel(
-      'roof',
-      'Roof',
-      [g.width * 0.84, 0.05, Math.max(0.4, lm.zRoofEnd - lm.zScreenTop)],
-      [0, lm.roofY - 0.02, (lm.zScreenTop + lm.zRoofEnd) / 2],
-    ),
-  );
-  parts.push(
-    panel(
-      'front_fascia',
-      'Front fascia',
-      [g.width * 0.94, Math.max(0.2, lm.noseY - lm.sillY), 0.12],
-      [0, (lm.sillY + lm.noseY) / 2, lm.zNose + 0.06],
-    ),
-  );
-  parts.push(
-    panel(
-      'rear_fascia',
-      'Rear fascia',
-      [g.width * 0.94, Math.max(0.2, lm.tailY - lm.sillY), 0.1],
-      [0, (lm.sillY + lm.tailY) / 2, lm.zTail - 0.05],
-    ),
-  );
 
   if (g.hasBed) {
     parts.push({
@@ -201,48 +203,15 @@ export function buildStructure(l: Layout): PartDef[] {
       position: [0, lm.deckY - 0.34, (lm.zDeckStart + lm.zTail) / 2],
       material: 'steel',
     });
-    parts.push(
-      panel(
-        'tailgate',
-        'Tailgate',
-        [g.width * 0.9, lm.tailY - (lm.deckY - 0.36), 0.05],
-        [0, (lm.tailY + lm.deckY - 0.36) / 2, lm.zTail - 0.04],
-      ),
-    );
-  }
-
-  const screenRun = lm.zScreenTop - lm.zBonnetEnd;
-  const screenRise = lm.roofY - lm.bonnetY;
-  parts.push({
-    component: 'structure.glazing',
-    variant: 'windscreen',
-    instanceLabel: 'Windscreen',
-    shape: { kind: 'box', size: [g.width * 0.8, Math.hypot(screenRun, screenRise), 0.015] },
-    position: [0, (lm.bonnetY + lm.roofY) / 2, (lm.zBonnetEnd + lm.zScreenTop) / 2],
-    rotation: [-Math.atan2(screenRun, screenRise), 0, 0],
-    material: 'glass',
-  });
-
-  const backRun = lm.zDeckStart - lm.zRoofEnd;
-  const backDrop = lm.roofY - lm.deckY;
-  parts.push({
-    component: 'structure.glazing',
-    variant: 'backlight',
-    instanceLabel: 'Rear screen',
-    shape: { kind: 'box', size: [g.width * 0.76, Math.hypot(backRun, backDrop), 0.015] },
-    position: [0, (lm.roofY + lm.deckY) / 2, (lm.zRoofEnd + lm.zDeckStart) / 2],
-    rotation: [Math.atan2(backRun, backDrop), 0, 0],
-    material: 'glass',
-  });
-
-  for (const side of [-1, 1] as const) {
+    const tail = profile(lm.zTail - 0.03);
     parts.push({
-      component: 'structure.glazing',
-      variant: side < 0 ? 'side_l' : 'side_r',
-      instanceLabel: side < 0 ? 'Left side glass' : 'Right side glass',
-      shape: { kind: 'box', size: [0.015, Math.max(0.2, lm.roofY - lm.deckY - 0.06), Math.max(0.3, lm.zRoofEnd - lm.zScreenTop + 0.2)] },
-      position: [side * (hw - 0.01), (lm.deckY + lm.roofY) / 2 + 0.02, (lm.zScreenTop + lm.zRoofEnd) / 2],
-      material: 'glass',
+      component: 'structure.body_panel',
+      variant: 'tailgate',
+      instanceLabel: 'Tailgate',
+      shape: { kind: 'box', size: [tail.width * 1.96, tail.belt - tail.bottom, 0.05] },
+      position: [0, (tail.belt + tail.bottom) / 2, lm.zTail - 0.025],
+      material: 'painted_body',
+      explode: [0, 0.2, 0.9],
     });
   }
 
@@ -324,7 +293,7 @@ export function buildSuspension(l: Layout): PartDef[] {
       component: 'drivetrain.road_wheel',
       variant: corner.variant,
       instanceLabel: label,
-      shape: { kind: 'cylinder', radius: g.wheelRadius, height: g.wheelWidth },
+      shape: { kind: 'tyre', radius: g.wheelRadius, width: g.wheelWidth, rimRadius: g.wheelRadius * 0.66 },
       position: [corner.x + sideSign * 0.06, l.hubY, corner.z],
       rotation: ALONG_X,
       material: 'rubber',
@@ -334,8 +303,8 @@ export function buildSuspension(l: Layout): PartDef[] {
       component: 'drivetrain.road_wheel',
       variant: `${corner.variant}_rim`,
       instanceLabel: `${label} rim`,
-      shape: { kind: 'cylinder', radius: g.wheelRadius * 0.68, height: g.wheelWidth * 0.92 },
-      position: [corner.x + sideSign * 0.075, l.hubY, corner.z],
+      shape: { kind: 'rim', radius: g.wheelRadius * 0.66, width: g.wheelWidth * 0.9, spokes: 5, face: corner.left ? 1 : -1 },
+      position: [corner.x + sideSign * 0.06, l.hubY, corner.z],
       rotation: ALONG_X,
       material: 'aluminium',
       explode: [sideSign * 0.85, 0, 0],

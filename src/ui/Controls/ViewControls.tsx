@@ -1,9 +1,9 @@
 import { useMemo } from 'react';
 import { ARCHETYPES, MEDIUM_COLORS, MEDIUM_LABEL_KEYS } from '@/domain/registry';
 import { applyDimensions } from '@/scene/procedural/layout';
-import { useAppStore, useConfiguration, type CameraPreset, type RenderMode } from '@/app/store/appStore';
+import { useAppStore, useConfiguration, type CameraPreset } from '@/app/store/appStore';
 import { useT, type TranslationKey } from '@/i18n';
-import { Button, Card, LabelledSlider, SegmentedControl, Switch, cx } from '../primitives';
+import { Button, Card, LabelledSlider, Switch, cx } from '../primitives';
 import { getBuiltVehicle } from '@/scene/procedural/buildVehicle';
 import { buildFlows } from '@/scene/procedural/buildFlows';
 
@@ -21,18 +21,12 @@ export function ViewControls() {
   const t = useT();
   const config = useConfiguration();
 
-  const renderMode = useAppStore((s) => s.renderMode);
-  const setRenderMode = useAppStore((s) => s.setRenderMode);
-  const explode = useAppStore((s) => s.explode);
-  const setExplode = useAppStore((s) => s.setExplode);
   const sections = useAppStore((s) => s.sections);
   const setSection = useAppStore((s) => s.setSection);
   const cameraPreset = useAppStore((s) => s.cameraPreset);
   const setCameraPreset = useAppStore((s) => s.setCameraPreset);
   const showFlows = useAppStore((s) => s.showFlows);
   const setShowFlows = useAppStore((s) => s.setShowFlows);
-  const cutaway = useAppStore((s) => s.cutaway);
-  const setCutaway = useAppStore((s) => s.setCutaway);
   const resetView = useAppStore((s) => s.resetView);
   const activeSystems = useAppStore((s) => s.activeSystems);
 
@@ -63,33 +57,6 @@ export function ViewControls() {
         }
       >
         <div className="space-y-3.5">
-          <SegmentedControl<RenderMode>
-            ariaLabel={t('mode.label')}
-            value={renderMode}
-            onChange={setRenderMode}
-            options={[
-              { id: 'realistic', label: t('mode.realistic'), hint: t('mode.realistic.hint') },
-              { id: 'schematic', label: t('mode.schematic'), hint: t('mode.schematic.hint') },
-              { id: 'xray', label: t('mode.xray'), hint: t('mode.xray.hint') },
-            ]}
-          />
-
-          <Switch
-            id="cutaway"
-            label={t('controls.cutaway')}
-            hint={t('controls.cutaway.hint')}
-            checked={cutaway}
-            onCheckedChange={setCutaway}
-          />
-
-          <LabelledSlider
-            id="explode"
-            label={t('controls.explode')}
-            value={explode}
-            onChange={setExplode}
-            format={(v) => `${Math.round(v * 100)}%`}
-          />
-
           <Switch id="flows" label={t('controls.flows')} checked={showFlows} onCheckedChange={setShowFlows} />
         </div>
       </Card>

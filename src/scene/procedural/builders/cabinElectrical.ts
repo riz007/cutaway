@@ -1,5 +1,6 @@
 import type { PartDef } from '../types';
 import { ALONG_X, ALONG_Z, type Layout } from '../layout';
+import { bodyProfile } from '../bodySurface';
 
 export function buildElectrical(l: Layout): PartDef[] {
   const parts: PartDef[] = [];
@@ -100,23 +101,28 @@ export function buildElectrical(l: Layout): PartDef[] {
     explode: [0, 1.1, 0],
   });
 
+  const profile = bodyProfile(l.shell);
+  const head = profile(l.zNose + 0.08);
+  const tail = profile(l.zTail - 0.07);
   for (const side of [-1, 1] as const) {
     parts.push({
       component: 'electrical.headlight',
       variant: side < 0 ? 'l' : 'r',
       instanceLabel: side < 0 ? 'Left' : 'Right',
-      shape: { kind: 'box', size: [0.3, 0.14, 0.12] },
-      position: [side * l.halfWidth * 0.68, l.beltlineY - 0.14, l.zNose + 0.1],
-      material: 'glass',
+      shape: { kind: 'box', size: [0.34, 0.085, 0.2] },
+      position: [side * (head.width - 0.21), head.top - 0.085, l.zNose + 0.075],
+      rotation: [0, side * -0.18, 0],
+      material: 'lamp',
       explode: [side * 0.4, 0.2, -0.7],
     });
     parts.push({
       component: 'electrical.taillight',
       variant: side < 0 ? 'l' : 'r',
       instanceLabel: side < 0 ? 'Left' : 'Right',
-      shape: { kind: 'box', size: [0.22, 0.16, 0.08] },
-      position: [side * l.halfWidth * 0.78, l.beltlineY - 0.12, l.zTail - 0.08],
-      material: 'glass',
+      shape: { kind: 'box', size: [0.28, 0.08, 0.18] },
+      position: [side * (tail.width - 0.17), tail.belt - 0.07, l.zTail - 0.06],
+      rotation: [0, side * 0.2, 0],
+      material: 'lamp_red',
       explode: [side * 0.4, 0.2, 0.7],
     });
   }
@@ -201,14 +207,17 @@ export function buildSafetyAdas(l: Layout): PartDef[] {
     explode: [0, 0.8, 0.5],
   });
 
+  const curtainStart = l.body.landmarks.zScreenTop + 0.05;
+  const curtainEnd = Math.max(curtainStart + 0.4, l.body.landmarks.zRoofEnd - 0.05);
+  const rail = bodyProfile(l.shell)((curtainStart + curtainEnd) / 2);
   for (const side of [-1, 1] as const) {
     const label = side < 0 ? 'Left' : 'Right';
     parts.push({
       component: 'safety_adas.airbag_curtain',
       variant: side < 0 ? 'l' : 'r',
       instanceLabel: label,
-      shape: { kind: 'box', size: [0.05, 0.06, (l.zCabinEnd - l.zFirewall) * 0.8] },
-      position: [side * (l.halfWidth - 0.05), l.roofY - 0.08, (l.zFirewall + l.zCabinEnd) / 2],
+      shape: { kind: 'box', size: [0.05, 0.06, (curtainEnd - curtainStart) * 0.92] },
+      position: [side * (rail.edgeWidth - 0.06), rail.edgeY - 0.05, (curtainStart + curtainEnd) / 2],
       material: 'fabric',
       explode: [side * 0.5, 0.5, 0],
     });

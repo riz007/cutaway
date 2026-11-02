@@ -1,15 +1,15 @@
-import { Suspense, useEffect, useMemo } from 'react';
+import { Suspense, useEffect, useMemo, useState } from 'react';
 import * as THREE from 'three';
 import { Canvas, useThree } from '@react-three/fiber';
-import { AdaptiveDpr, AdaptiveEvents, ContactShadows, Preload } from '@react-three/drei';
+import { ContactShadows, PerformanceMonitor, Preload } from '@react-three/drei';
 import { ARCHETYPES } from '@/domain/registry';
 import { applyDimensions } from './procedural/layout';
 import { useAppStore, useConfiguration } from '@/app/store/appStore';
 import { startSimLoop } from '@/sim/tick';
-import { getBuiltVehicle } from './procedural/buildVehicle';
 import { VehicleScene } from './VehicleScene';
 import { CameraRig } from './cameras/CameraRig';
-import { Lighting } from './lighting/Lighting';
+import { Lighting, type Quality } from './lighting/Lighting';
+import { Showroom } from './lighting/Showroom';
 import { ClipPlanes } from './interaction/ClipPlanes';
 import { Effects } from './effects/Effects';
 import { useT } from '@/i18n';
@@ -41,12 +41,15 @@ function SimDriver() {
   return null;
 }
 
+const DPR: Record<Quality, [number, number]> = { high: [1, 2], medium: [1, 1.5], low: [1, 1] };
+const STEP_DOWN: Record<Quality, Quality> = { high: 'medium', medium: 'low', low: 'low' };
+const STEP_UP: Record<Quality, Quality> = { high: 'high', medium: 'high', low: 'medium' };
+
 export function SceneCanvas() {
   const t = useT();
   const config = useConfiguration();
   const renderMode = useAppStore((s) => s.renderMode);
   const reducedMotion = useAppStore((s) => s.reducedMotion);
-  const focusedComponentId = useAppStore((s) => s.focusedComponentId);
   const setWebglAvailable = useAppStore((s) => s.setWebglAvailable);
   const setPlaying = useAppStore((s) => s.setPlaying);
 
@@ -55,16 +58,11 @@ export function SceneCanvas() {
     [config.archetype, config.dimensions],
   );
 
-  const isMobile = useMemo(
+  const coarsePointer = useMemo(
     () => typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches,
     [],
   );
-
-  const focusPoint = useMemo(() => {
-    if (!focusedComponentId) return null;
-    const part = getBuiltVehicle(config).parts.find((p) => p.componentId === focusedComponentId);
-    return part ? new THREE.Vector3(...part.position) : null;
-  }, [focusedComponentId, config.vehicleId, config.archetype, config.powertrain]);
+  const [quality, setQuality] = useState<Quality>(coarsePointer ? 'low' : 'high');
 
   useEffect(() => {
     setWebglAvailable(detectWebgl2());
@@ -74,37 +72,52 @@ export function SceneCanvas() {
     setPlaying(false);
   }, [config.vehicleId, config.powertrain, setPlaying]);
 
+  const realistic = renderMode === 'realistic';
+  const plinthRadius = Math.hypot(geometry.length, geometry.width) * 0.58;
+
   return (
     <Canvas
       frameloop="demand"
-      shadows={renderMode === 'realistic' && !isMobile ? 'soft' : false}
-      dpr={isMobile ? [1, 1.5] : [1, 2]}
+      shadows={realistic && quality !== 'low' ? 'soft' : false}
+      dpr={DPR[quality]}
       gl={{ antialias: false, powerPreference: 'high-performance', stencil: false }}
       camera={{
         position: [geometry.length * 1.0, geometry.height * 1.3, -geometry.length * 1.1],
-        fov: 42,
+        fov: 40,
         near: 0.05,
-        far: 60,
+        far: 80,
       }}
       aria-label={t('a11y.canvas')}
       role="application"
-      onCreated={({ gl }) => {
-        gl.toneMapping = THREE.ACESFilmicToneMapping;
-        gl.toneMappingExposure = 1.15;
+      tabIndex={0}
+      data-orbit-keys=""
+      onCreated={({ gl, raycaster }) => {
+        gl.toneMapping = THREE.AgXToneMapping;
+        gl.toneMappingExposure = 1.25;
         gl.localClippingEnabled = true;
+        raycaster.firstHitOnly = true;
       }}
     >
-      <color attach="background" args={[renderMode === 'schematic' ? '#0f141b' : '#0b0f14']} />
+      <PerformanceMonitor
+        flipflops={3}
+        onDecline={() => setQuality((q) => STEP_DOWN[q])}
+        onIncline={() => setQuality((q) => (coarsePointer ? q : STEP_UP[q]))}
+        onFallback={() => setQuality('low')}
+      />
+
+      <color attach="background" args={[renderMode === 'schematic' ? '#0b1016' : '#06080b']} />
+      <fog attach="fog" args={[renderMode === 'schematic' ? '#0b1016' : '#06080b', geometry.length * 3, geometry.length * 9]} />
 
       <Suspense fallback={null}>
-        <Lighting mode={renderMode} quality={isMobile ? 'low' : 'high'} />
+        <Lighting mode={renderMode} quality={quality} />
         <VehicleScene />
-        {renderMode === 'realistic' && !isMobile && (
+        <Showroom radius={plinthRadius} mode={renderMode} quality={quality} />
+        {realistic && quality !== 'low' && (
           <ContactShadows
-            position={[0, 0.001, 0]}
-            scale={geometry.length * 1.6}
-            blur={2.2}
-            opacity={0.72}
+            position={[0, 0.002, 0]}
+            scale={plinthRadius * 2}
+            blur={2.4}
+            opacity={0.8}
             far={2.2}
             resolution={1024}
             frames={reducedMotion ? 1 : Infinity}
@@ -113,14 +126,10 @@ export function SceneCanvas() {
         <Preload all />
       </Suspense>
 
-      <gridHelper args={[geometry.length * 4, 24, '#1e293b', '#141c26']} />
-
-      <CameraRig geometry={geometry} focusPoint={focusPoint} />
+      <CameraRig geometry={geometry} />
       <ClipPlanes />
-      <Effects mode={renderMode} enabled={!isMobile} />
+      <Effects mode={renderMode} enabled={quality !== 'low'} />
       <SimDriver />
-      <AdaptiveDpr pixelated />
-      <AdaptiveEvents />
     </Canvas>
   );
 }

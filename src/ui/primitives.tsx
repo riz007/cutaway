@@ -157,8 +157,6 @@ export function LabelledSlider({
         max={max}
         step={step}
         onValueChange={([next]) => onChange(next ?? min)}
-        aria-label={label}
-        aria-valuetext={display}
       >
         <Slider.Track className="relative h-1.5 w-full grow overflow-hidden rounded-full bg-elevated">
           <Slider.Range className="absolute h-full bg-primary" />
@@ -166,6 +164,7 @@ export function LabelledSlider({
         <Slider.Thumb
           className="block h-4 w-4 rounded-full border-2 border-primary bg-bg shadow-sm transition-transform hover:scale-110 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
           aria-label={label}
+          aria-valuetext={display}
         />
       </Slider.Root>
     </Field>

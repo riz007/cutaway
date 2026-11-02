@@ -96,20 +96,21 @@ describe('procedural archetypes', () => {
   });
 
   it('gives each platform a distinct silhouette', () => {
-    const profileOf = (archetype: Parameters<typeof buildVehicle>[0]['archetype'], powertrain: never | string) => {
+    const shellOf = (archetype: Parameters<typeof buildVehicle>[0]['archetype'], powertrain: never | string) => {
       const built = buildVehicle({ archetype, powertrain: powertrain as never });
-      const flank = built.parts.find((p) => p.shape.kind === 'profile');
+      const flank = built.parts.find((p) => p.shape.kind === 'body');
       expect(flank, archetype).toBeDefined();
-      return flank!.shape.kind === 'profile' ? flank!.shape.points : [];
+      if (flank!.shape.kind !== 'body') throw new Error('body shell expected');
+      return flank!.shape.params;
     };
 
-    const pickup = profileOf('pickup', 'turbo_diesel');
-    const van = profileOf('mpv_van', 'na_petrol');
-    const sedan = profileOf('sedan_c', 'na_petrol');
+    const pickup = shellOf('pickup', 'turbo_diesel');
+    const van = shellOf('mpv_van', 'na_petrol');
+    const sedan = shellOf('sedan_c', 'na_petrol');
 
-    const bonnetEnd = (points: [number, number][]) => points[2]![0] - points[0]![0];
-    expect(bonnetEnd(pickup)).toBeGreaterThan(bonnetEnd(van) * 1.8);
-    expect(bonnetEnd(sedan)).toBeGreaterThan(bonnetEnd(van));
+    const bonnet = (p: typeof van) => p.zBonnetEnd - p.zNose;
+    expect(bonnet(pickup)).toBeGreaterThan(bonnet(van) * 1.8);
+    expect(bonnet(sedan)).toBeGreaterThan(bonnet(van));
   });
 
   it('gives every part a non-zero explode vector', () => {

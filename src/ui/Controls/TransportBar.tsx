@@ -57,8 +57,6 @@ function PedalSlider({
         max={1}
         step={0.01}
         onValueChange={([next]) => onChange(next ?? 0)}
-        aria-label={label}
-        aria-valuetext={`${Math.round(value * 100)}%`}
       >
         <Slider.Track className="relative h-1.5 w-full grow overflow-hidden rounded-full bg-elevated">
           <Slider.Range className="absolute h-full" style={{ backgroundColor: tint }} />
@@ -67,6 +65,7 @@ function PedalSlider({
           className="block h-3.5 w-3.5 rounded-full border-2 bg-bg"
           style={{ borderColor: tint }}
           aria-label={label}
+          aria-valuetext={`${Math.round(value * 100)}%`}
         />
       </Slider.Root>
       <span className="numeric w-9 shrink-0 text-right text-2xs text-muted">{Math.round(value * 100)}%</span>
@@ -91,6 +90,7 @@ export function TransportBar() {
 
   const hasEngine = trim.powertrain !== 'bev';
   const hasPack = ['hev_series_parallel', 'phev_dmi', 'erev', 'bev'].includes(trim.powertrain);
+  const engaged = playing || readouts.timeS > 0;
 
   useEffect(() => {
     setAnnouncement(playing ? t('a11y.simRunning') : t('a11y.simPaused'));
@@ -119,7 +119,7 @@ export function TransportBar() {
         {announcement}
       </p>
 
-      <div className="flex flex-wrap items-center gap-x-3 gap-y-2 px-3 pt-2.5">
+      <div className={cx('flex flex-wrap items-center gap-x-3 gap-y-2 px-3', engaged ? 'pt-2.5' : 'py-2.5')}>
         <div className="flex items-center gap-1.5">
           <Button
             variant={playing ? 'secondary' : 'primary'}
@@ -218,30 +218,33 @@ export function TransportBar() {
 
       </div>
 
-      <div className="grid gap-x-5 gap-y-1 px-3 py-2 sm:grid-cols-2">
-        <PedalSlider
-          id="transport-throttle"
-          label={t('control.throttle')}
-          value={controls.throttle}
-          onChange={(throttle) => setControls({ throttle })}
-          tint="var(--color-success)"
-        />
-        <PedalSlider
-          id="transport-brake"
-          label={t('control.brake')}
-          value={controls.brake}
-          onChange={(brake) => setControls({ brake })}
-          tint="var(--color-danger)"
-        />
-      </div>
+      {engaged && (
+        <div className="grid gap-x-5 gap-y-1 px-3 py-2 sm:grid-cols-2">
+          <PedalSlider
+            id="transport-throttle"
+            label={t('control.throttle')}
+            value={controls.throttle}
+            onChange={(throttle) => setControls({ throttle })}
+            tint="var(--color-success)"
+          />
+          <PedalSlider
+            id="transport-brake"
+            label={t('control.brake')}
+            value={controls.brake}
+            onChange={(brake) => setControls({ brake })}
+            tint="var(--color-danger)"
+          />
+        </div>
+      )}
 
-      <dl
-        aria-live="off"
-        aria-label={t('transport.gauges')}
-        className="flex flex-wrap items-end gap-x-5 gap-y-2 border-t border-border px-3.5 py-2"
-      >
-        {hasEngine && (
-          <Gauge label={t('readout.rpm')} value={readouts.engineRpm.toFixed(0)} unit={t('units.rpm')} emphasis />
+      {engaged && (
+        <dl
+          aria-live="off"
+          aria-label={t('transport.gauges')}
+          className="flex flex-wrap items-end gap-x-5 gap-y-2 border-t border-border px-3.5 py-2"
+        >
+          {hasEngine && (
+            <Gauge label={t('readout.rpm')} value={readouts.engineRpm.toFixed(0)} unit={t('units.rpm')} emphasis />
         )}
         <Gauge
           label={t('readout.speed')}
@@ -272,6 +275,7 @@ export function TransportBar() {
           <Gauge label={t('readout.hybridMode')} value={t(`hybrid.${readouts.hybridMode}` as TranslationKey)} />
         )}
       </dl>
+      )}
     </section>
   );
 }

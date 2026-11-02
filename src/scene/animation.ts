@@ -1,8 +1,8 @@
 import * as THREE from 'three';
 import type { SimState } from '@/sim/simStore';
-import { TWO_PI, pistonTravel, valveState } from '@/sim/engine';
-import { DEFAULT_ENGINE } from '@/sim/engine';
+import { DEFAULT_ENGINE, TWO_PI, crankKinematics, cylinderCycleAngle, pistonTravel, valveState } from '@/sim/engine';
 import type { PartInstance } from './procedural/types';
+import { STAGE_REACH, partProgress, stageOf, staggerOf, type ExplodeStage } from './explodeStages';
 
 export type MotionKind =
   | 'none'
@@ -29,6 +29,15 @@ export interface MotionPlan {
   explode: THREE.Vector3;
 
   sideSign: number;
+  stage: ExplodeStage;
+  stagger: number;
+  crank: {
+    pivot: THREE.Vector3;
+    bank: THREE.Vector3;
+    across: THREE.Vector3;
+    tiltSign: number;
+    rise: number;
+  } | null;
 }
 
 const CYLINDER_VARIANT = /__c(\d+)(?:_(in|ex))?__/;
@@ -53,7 +62,6 @@ function motionFor(part: PartInstance): MotionKind {
     case 'powertrain.camshaft_intake':
     case 'powertrain.camshaft_exhaust':
     case 'powertrain.vvt_actuator':
-    case 'powertrain.timing_chain':
       return 'cam_spin';
     case 'drivetrain.road_wheel':
     case 'drivetrain.wheel_hub':
@@ -85,23 +93,33 @@ export function planFor(part: PartInstance): MotionPlan {
   const match = CYLINDER_VARIANT.exec(part.nodeId);
   const index = match?.[1] ? Number(match[1]) - 1 : 0;
   const euler = new THREE.Euler(part.rotation[0], part.rotation[1], part.rotation[2], 'XYZ');
+  const stage = stageOf(part);
+  const k = part.kinematic;
   return {
     kind: motionFor(part),
     index,
     basePosition: new THREE.Vector3(...part.position),
     baseQuaternion: new THREE.Quaternion().setFromEuler(euler),
-    explode: new THREE.Vector3(...part.explode),
+    explode: new THREE.Vector3(...part.explode).multiplyScalar(STAGE_REACH[stage]),
     sideSign: part.position[0] < 0 ? -1 : 1,
+    stage,
+    stagger: staggerOf(part.nodeId),
+    crank: k
+      ? {
+          pivot: new THREE.Vector3(...k.pivot),
+          bank: k.bank === 'x' ? new THREE.Vector3(1, 0, 0) : new THREE.Vector3(0, 0, 1),
+          across: k.bank === 'x' ? new THREE.Vector3(0, 0, 1) : new THREE.Vector3(1, 0, 0),
+          tiltSign: k.bank === 'x' ? 1 : -1,
+          rise: k.rise ?? 0,
+        }
+      : null,
   };
 }
 
 const spin = new THREE.Quaternion();
+const tilt = new THREE.Quaternion();
 const spinAxis = new THREE.Vector3(0, 1, 0);
 const offset = new THREE.Vector3();
-
-function cycleAngle(crankAngle: number, index: number, cylinders: number): number {
-  return (crankAngle + (index * 2 * TWO_PI) / cylinders) % (2 * TWO_PI);
-}
 
 const STROKE = DEFAULT_ENGINE.crankThrow * 2;
 
@@ -121,12 +139,31 @@ export function applyMotion(object: THREE.Object3D, plan: MotionPlan, ctx: Frame
 
   offset.set(0, 0, 0);
   object.quaternion.copy(plan.baseQuaternion);
+  const reach = partProgress(ctx.explode, plan.stage, plan.stagger);
+
+  if (plan.crank && (plan.kind === 'piston' || plan.kind === 'rings' || plan.kind === 'rod')) {
+    const angle = cylinderCycleAngle(sim.crankAngle, plan.index, ctx.cylinders);
+    const k = crankKinematics(angle, DEFAULT_ENGINE.crankThrow, DEFAULT_ENGINE.rodLength);
+    const { pivot, across, bank, tiltSign, rise } = plan.crank;
+
+    object.position.copy(pivot);
+    if (plan.kind === 'rod') {
+      object.position.y += (k.pinUp + k.pistonHeight) / 2;
+      object.position.addScaledVector(across, k.pinAcross / 2);
+      tilt.setFromAxisAngle(bank, tiltSign * k.rodAngle);
+      object.quaternion.premultiply(tilt);
+    } else {
+      object.position.y += k.pistonHeight + rise;
+    }
+    object.position.addScaledVector(plan.explode, reach);
+    return;
+  }
 
   switch (plan.kind) {
     case 'piston':
     case 'rings':
     case 'rod': {
-      const angle = cycleAngle(sim.crankAngle, plan.index, ctx.cylinders);
+      const angle = cylinderCycleAngle(sim.crankAngle, plan.index, ctx.cylinders);
       const travel = pistonTravel(angle, DEFAULT_ENGINE);
       const amplitude = plan.kind === 'rod' ? STROKE * 0.5 : STROKE;
       offset.y = (travel - 0.5) * amplitude;
@@ -134,7 +171,7 @@ export function applyMotion(object: THREE.Object3D, plan: MotionPlan, ctx: Frame
     }
     case 'valve_intake':
     case 'valve_exhaust': {
-      const angle = cycleAngle(sim.crankAngle, plan.index, ctx.cylinders);
+      const angle = cylinderCycleAngle(sim.crankAngle, plan.index, ctx.cylinders);
       const lift = valveState(angle);
       offset.y = -(plan.kind === 'valve_intake' ? lift.intake : lift.exhaust) * 0.012;
       break;
@@ -178,7 +215,7 @@ export function applyMotion(object: THREE.Object3D, plan: MotionPlan, ctx: Frame
       break;
   }
 
-  object.position.copy(plan.basePosition).addScaledVector(plan.explode, ctx.explode).add(offset);
+  object.position.copy(plan.basePosition).addScaledVector(plan.explode, reach).add(offset);
 }
 
 export function advanceWheelAngle(current: number, speedKph: number, wheelRadiusM: number, dt: number): number {

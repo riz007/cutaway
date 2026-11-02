@@ -57,7 +57,7 @@ export function FlowTube({ flow, visible, dimmed }: FlowTubeProps) {
   });
 
   return (
-    <mesh geometry={geometry} visible={visible} frustumCulled={false} renderOrder={2}>
+    <mesh geometry={geometry} visible={visible} frustumCulled={false} renderOrder={2} raycast={() => undefined}>
       <primitive ref={materialRef} object={material} attach="material" />
     </mesh>
   );

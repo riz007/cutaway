@@ -7,8 +7,52 @@ export const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 export const pistonY = (theta: number, r: number, l: number): number =>
   r * Math.cos(theta) + Math.sqrt(l * l - (r * Math.sin(theta)) ** 2);
 
+const FIRING_ORDER: Record<number, number[]> = {
+  3: [0, 1, 2],
+  4: [0, 2, 3, 1],
+};
+
+export function firingOrder(cylinders: number): number[] {
+  return FIRING_ORDER[cylinders] ?? Array.from({ length: cylinders }, (_, i) => i);
+}
+
+// How far behind cylinder 1 a cylinder runs through the 720° cycle. For an
+// inline four firing 1-3-4-2 this puts crank pins 1 and 4 together, 2 and 3
+// together, exactly as on a real flat-plane crank.
+export function cylinderPhase(index: number, cylinders: number): number {
+  const slot = Math.max(0, firingOrder(cylinders).indexOf(index));
+  return -(slot * 2 * TWO_PI) / cylinders;
+}
+
 export function firingOffsets(cylinders: number): number[] {
-  return Array.from({ length: cylinders }, (_, i) => (i * 2 * TWO_PI) / cylinders);
+  return Array.from({ length: cylinders }, (_, i) => cylinderPhase(i, cylinders));
+}
+
+export function cylinderCycleAngle(crankAngle: number, index: number, cylinders: number): number {
+  const cycle = 2 * TWO_PI;
+  return (((crankAngle + cylinderPhase(index, cylinders)) % cycle) + cycle) % cycle;
+}
+
+export interface CrankKinematics {
+  pistonHeight: number;
+  pinUp: number;
+  pinAcross: number;
+  rodAngle: number;
+}
+
+// Slider-crank geometry in the plane of one cylinder: heights are measured up
+// the bore from the crank axis, `across` is perpendicular to both bore and
+// crank, and the rod angle is its lean away from the bore axis.
+export function crankKinematics(cycleAngle: number, r: number, l: number): CrankKinematics {
+  const sin = Math.sin(cycleAngle);
+  const cos = Math.cos(cycleAngle);
+  const rise = Math.sqrt(l * l - (r * sin) ** 2);
+  return {
+    pistonHeight: r * cos + rise,
+    pinUp: r * cos,
+    pinAcross: -r * sin,
+    rodAngle: Math.atan2(r * sin, rise),
+  };
 }
 
 export type StrokeName = 'intake' | 'compression' | 'power' | 'exhaust';

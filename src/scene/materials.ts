@@ -17,6 +17,8 @@ interface MaterialSpec {
   envMapIntensity?: number;
   iridescence?: number;
   surface?: 'cast' | 'machined' | 'paint' | 'weave' | 'none';
+  emissive?: string;
+  emissiveIntensity?: number;
 
   tiling?: number;
   normalScale?: number;
@@ -82,12 +84,12 @@ const SPECS: Record<MaterialKey, MaterialSpec> = {
     normalScale: 0.35,
   },
   glass: {
-    color: '#a9cede',
-    roughness: 0.04,
+    color: '#20303c',
+    roughness: 0.03,
     metalness: 0.0,
-    opacity: 0.22,
+    opacity: 0.42,
     transparent: true,
-    envMapIntensity: 1.8,
+    envMapIntensity: 2.2,
     clearcoat: 1,
     clearcoatRoughness: 0.02,
     ior: 1.5,
@@ -133,6 +135,28 @@ const SPECS: Record<MaterialKey, MaterialSpec> = {
     surface: 'cast',
     tiling: 22,
     normalScale: 0.55,
+  },
+  lamp: {
+    color: '#e8eef5',
+    roughness: 0.08,
+    metalness: 0.2,
+    clearcoat: 1,
+    clearcoatRoughness: 0.03,
+    envMapIntensity: 1.6,
+    emissive: '#cfe0ff',
+    emissiveIntensity: 0.55,
+    surface: 'none',
+  },
+  lamp_red: {
+    color: '#5c0a10',
+    roughness: 0.12,
+    metalness: 0.0,
+    clearcoat: 1,
+    clearcoatRoughness: 0.04,
+    envMapIntensity: 1.2,
+    emissive: '#ff2433',
+    emissiveIntensity: 0.6,
+    surface: 'none',
   },
   fabric: {
     color: '#4a4f57',
@@ -215,6 +239,8 @@ export function realisticMaterial(key: MaterialKey): THREE.MeshPhysicalMaterial 
     iridescence: spec.iridescence ?? 0,
     reflectivity: spec.reflectivity ?? 0.5,
     ior: spec.ior ?? 1.5,
+    emissive: new THREE.Color(spec.emissive ?? '#000000'),
+    emissiveIntensity: spec.emissiveIntensity ?? 1,
   });
   material.name = `mat_${key}`;
   applySurface(material, spec);

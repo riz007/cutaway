@@ -2,6 +2,7 @@ import type { ArchetypeId, PowertrainId, SystemId, Vec3, VehicleDimensions } fro
 import { ARCHETYPES, COMPONENTS_BY_ID, appliesTo } from '@/domain/registry';
 import type { BuiltScene, PartDef, PartInstance } from './types';
 import { makeLayout, type Layout } from './layout';
+import { fitInsideBody } from './fitBody';
 import { buildStructure, buildSuspension, buildChassisHydraulics } from './builders/structureSuspension';
 import { buildPowertrain, buildLubrication, buildAir, buildFuel } from './builders/powertrainGroup';
 import { buildCooling, buildHvac } from './builders/thermal';
@@ -87,6 +88,7 @@ export function buildSystem(system: SystemId, l: Layout, config: BuildConfig): P
       explode: def.explode ?? deriveExplode(def.position, centroid),
       material: def.material,
       ...(def.instanceLabel ? { instanceLabel: def.instanceLabel } : {}),
+      ...(def.kinematic ? { kinematic: def.kinematic } : {}),
       lod,
     } satisfies PartInstance;
   });
@@ -94,7 +96,10 @@ export function buildSystem(system: SystemId, l: Layout, config: BuildConfig): P
 
 export function buildVehicle(config: BuildConfig): BuiltScene {
   const layout = makeLayout(ARCHETYPES[config.archetype], config.powertrain, config.dimensions);
-  const parts = (Object.keys(BUILDERS) as SystemId[]).flatMap((s) => buildSystem(s, layout, config));
+  const parts = fitInsideBody(
+    (Object.keys(BUILDERS) as SystemId[]).flatMap((s) => buildSystem(s, layout, config)),
+    layout.shell,
+  );
 
   const g = layout.g;
   return {

@@ -1,14 +1,35 @@
 import type { Vec3 } from '@/domain/types';
-import type { PartDef } from '../types';
-import { ALONG_X, ALONG_Z, type Layout } from '../layout';
+import { DEFAULT_ENGINE, TWO_PI, cylinderPhase } from '@/sim/engine';
+import type { Kinematic, PartDef } from '../types';
+import { ALONG_X, ALONG_Z, SHAFT_ALONG_Z, type Layout } from '../layout';
 
 const CYLINDERS = (l: Layout) => (l.powertrain === 'hev_series_parallel' || l.powertrain === 'erev' ? 3 : 4);
+const PITCH = 0.095;
+const CRANK_DROP = 0.12;
+const INTAKE_PEAK = Math.PI * 0.5;
+const EXHAUST_PEAK = Math.PI * 3.5;
+
+const wrap = (a: number) => ((a % TWO_PI) + TWO_PI) % TWO_PI;
+
+function bankOffset(i: number, count: number): number {
+  return (i - (count - 1) / 2) * PITCH;
+}
 
 function cylinderPos(l: Layout, i: number, count: number, y: number): Vec3 {
   const [ex, , ez] = l.engineBay;
-  const pitch = 0.095;
-  const offset = (i - (count - 1) / 2) * pitch;
+  const offset = bankOffset(i, count);
   return l.g.engineLayout === 'longitudinal' ? [ex, y, ez + offset] : [ex + offset, y, ez];
+}
+
+// The shaft mesh runs along its local Y. Transverse engines map that to world
+// -X and longitudinal ones to world +Z, so a cylinder's station flips sign.
+function shaftStation(l: Layout, i: number, count: number): number {
+  const offset = bankOffset(i, count);
+  return l.g.engineLayout === 'longitudinal' ? offset : -offset;
+}
+
+function lobeAngle(peak: number, phase: number): number {
+  return wrap(Math.PI - (peak - phase) / 2);
 }
 
 const bankAxis = (l: Layout): Vec3 => (l.g.engineLayout === 'longitudinal' ? ALONG_Z : ALONG_X);
@@ -45,11 +66,25 @@ export function buildPowertrain(l: Layout): PartDef[] {
     material: 'aluminium',
     explode: [0, 0.75, 0],
   });
+  const shaftRotation = longitudinal ? SHAFT_ALONG_Z : ALONG_X;
+  const crankY = ey - CRANK_DROP;
+  const bank: Kinematic['bank'] = longitudinal ? 'z' : 'x';
+
   parts.push({
     component: 'powertrain.crankshaft',
-    shape: { kind: 'cylinder', radius: 0.035, height: blockLen + 0.06 },
-    position: [ex, ey - 0.12, ez],
-    rotation: axis,
+    shape: {
+      kind: 'crankshaft',
+      throw: DEFAULT_ENGINE.crankThrow,
+      journalRadius: 0.024,
+      pinRadius: 0.019,
+      span: blockLen + 0.06,
+      throws: Array.from({ length: count }, (_, i) => ({
+        station: shaftStation(l, i, count),
+        angle: wrap(cylinderPhase(i, count)),
+      })),
+    },
+    position: [ex, crankY, ez],
+    rotation: shaftRotation,
     material: 'steel',
     explode: [0, -0.75, 0],
   });
@@ -64,34 +99,38 @@ export function buildPowertrain(l: Layout): PartDef[] {
 
   for (let i = 0; i < count; i += 1) {
     const label = `Cylinder ${i + 1}`;
-    const phaseLift = 0.02 * Math.cos((i / count) * Math.PI * 2);
+    const pivot = cylinderPos(l, i, count, crankY);
+    const restHeight = DEFAULT_ENGINE.rodLength;
     parts.push({
       component: 'powertrain.piston',
       variant: `c${i + 1}`,
       instanceLabel: label,
       shape: { kind: 'cylinder', radius: 0.038, height: 0.06 },
-      position: cylinderPos(l, i, count, ey + 0.06 + phaseLift),
+      position: cylinderPos(l, i, count, crankY + restHeight + 0.012),
       material: 'aluminium',
       explode: [0, 1.1, 0],
+      kinematic: { pivot, bank, rise: 0.012 },
     });
     parts.push({
       component: 'powertrain.piston_rings',
       variant: `c${i + 1}`,
       instanceLabel: label,
       shape: { kind: 'torus', radius: 0.038, tube: 0.004 },
-      position: cylinderPos(l, i, count, ey + 0.085 + phaseLift),
+      position: cylinderPos(l, i, count, crankY + restHeight + 0.032),
       rotation: [Math.PI / 2, 0, 0],
       material: 'steel',
       explode: [0, 1.25, 0],
+      kinematic: { pivot, bank, rise: 0.032 },
     });
     parts.push({
       component: 'powertrain.connecting_rod',
       variant: `c${i + 1}`,
       instanceLabel: label,
-      shape: { kind: 'box', size: [0.026, 0.14, 0.03] },
-      position: cylinderPos(l, i, count, ey - 0.03 + phaseLift * 0.5),
+      shape: { kind: 'box', size: [0.022, DEFAULT_ENGINE.rodLength, 0.03] },
+      position: cylinderPos(l, i, count, crankY + restHeight / 2),
       material: 'steel',
       explode: [0, 0.9, 0],
+      kinematic: { pivot, bank },
     });
     parts.push({
       component: 'powertrain.spark_plug',
@@ -130,17 +169,26 @@ export function buildPowertrain(l: Layout): PartDef[] {
     }
   }
 
-  for (const [comp, across, variant] of [
-    ['powertrain.camshaft_intake', -0.06, 'in'],
-    ['powertrain.camshaft_exhaust', 0.06, 'ex'],
+  for (const [comp, across, variant, peak] of [
+    ['powertrain.camshaft_intake', -0.06, 'in', INTAKE_PEAK],
+    ['powertrain.camshaft_exhaust', 0.06, 'ex', EXHAUST_PEAK],
   ] as const) {
     const pos: Vec3 = longitudinal ? [ex + across, ey + 0.27, ez] : [ex, ey + 0.27, ez + across];
     parts.push({
       component: comp,
       variant,
-      shape: { kind: 'cylinder', radius: 0.018, height: blockLen },
+      shape: {
+        kind: 'camshaft',
+        radius: 0.014,
+        lift: 0.012,
+        span: blockLen,
+        lobes: Array.from({ length: count }, (_, i) => ({
+          station: shaftStation(l, i, count),
+          angle: lobeAngle(peak, cylinderPhase(i, count)),
+        })),
+      },
       position: pos,
-      rotation: axis,
+      rotation: shaftRotation,
       material: 'steel',
       explode: [0, 0.85, 0],
     });

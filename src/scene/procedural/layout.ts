@@ -1,5 +1,6 @@
 import type { Archetype, ArchetypeGeometry, PowertrainId, Vec3, VehicleDimensions } from '@/domain/types';
 import { BODY_STYLES, buildBodyShape, type BodyShape } from './bodyProfile';
+import { bodyProfile, type BodyParams } from './bodySurface';
 
 export interface Layout {
   archetype: Archetype;
@@ -27,6 +28,7 @@ export interface Layout {
   rearAxle: Vec3;
 
   body: BodyShape;
+  shell: BodyParams;
 
   measured: boolean;
 }
@@ -72,31 +74,39 @@ export function makeLayout(archetype: Archetype, powertrain: PowertrainId, dimen
   const zAxleF = zNose + g.frontOverhang;
   const zAxleR = zAxleF + g.wheelbase;
 
-  const body = buildBodyShape({
-    length: g.length,
-    height: g.height,
-    zNose,
-    zAxleF,
-    zAxleR,
-    groundClearance: g.groundClearance,
-    wheelRadius: g.wheelRadius,
-    style: BODY_STYLES[archetype.id],
-  });
+  const style = BODY_STYLES[archetype.id];
+  const body = buildBodyShape({ length: g.length, height: g.height, zNose, style });
 
   const zFirewall = body.landmarks.zBonnetEnd;
   const zCabinEnd = g.hasBed ? body.landmarks.zRoofEnd + 0.1 : body.landmarks.zDeckStart;
+
+  const shell: BodyParams = {
+    ...body.landmarks,
+    halfWidth: g.width / 2,
+    zAxleF,
+    zAxleR,
+    hubY: g.wheelRadius,
+    archRadius: g.wheelRadius * style.archScale,
+    tumblehome: style.tumblehome,
+    planRound: style.planRound,
+    bed: style.bed,
+    zBPillar: (zFirewall + zCabinEnd) / 2,
+  };
 
   const floorY = g.groundClearance + 0.06;
   const beltlineY = body.landmarks.deckY;
 
   const engineBayZ =
-    g.engineLayout === 'longitudinal' ? zAxleF + 0.35 : Math.min(zAxleF - 0.05, zFirewall - 0.45);
-
-  const bonnetSlope =
-    (body.landmarks.bonnetY - body.landmarks.noseY) / Math.max(0.2, body.landmarks.zBonnetEnd - zNose);
-  const bonnetAtBay = body.landmarks.noseY + bonnetSlope * (engineBayZ - zNose);
+    g.engineLayout === 'longitudinal'
+      ? zAxleF + 0.35
+      : Math.max(zNose + 0.42, Math.min(zAxleF - 0.05, zFirewall - 0.45));
 
   const ENGINE_HALF_HEIGHT = 0.4;
+  const ENGINE_REACH = 0.3;
+  const outline = bodyProfile(shell);
+  const bonnetAtBay = Math.min(
+    ...[-ENGINE_REACH, 0, ENGINE_REACH].map((dz) => outline(Math.max(zNose, engineBayZ + dz)).top - 0.03),
+  );
   const engineBayY =
     g.engineLayout === 'none'
       ? floorY + 0.18
@@ -126,6 +136,7 @@ export function makeLayout(archetype: Archetype, powertrain: PowertrainId, dimen
     engineBay: [0, engineBayY, engineBayZ],
     rearAxle: [0, g.wheelRadius, zAxleR],
     body,
+    shell,
     measured: Boolean(dimensions),
   };
 }
@@ -153,3 +164,7 @@ export const HALF_PI = Math.PI / 2;
 export const ALONG_X: Vec3 = [0, 0, HALF_PI];
 
 export const ALONG_Z: Vec3 = [HALF_PI, 0, 0];
+
+// Lays a Y-axis shaft along Z while keeping its local X pointing up, so
+// crank throws and cam lobes share one angular reference with transverse engines.
+export const SHAFT_ALONG_Z: Vec3 = [HALF_PI, HALF_PI, 0];

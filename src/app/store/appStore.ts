@@ -28,6 +28,7 @@ export interface AppState {
   renderMode: RenderMode;
 
   explode: number;
+  explodeSnap: number;
   sections: SectionPlane[];
   cameraPreset: CameraPreset;
 
@@ -37,6 +38,8 @@ export interface AppState {
   simSpeed: number;
   controls: SimControls;
   cutaway: boolean;
+  turntable: boolean;
+  introActive: boolean;
 
   showFlows: boolean;
   showLabels: boolean;
@@ -89,7 +92,9 @@ export interface AppActions {
   hover: (componentId: string | null) => void;
   focus: (componentId: string | null) => void;
   setRenderMode: (mode: RenderMode) => void;
-  setExplode: (value: number) => void;
+  setExplode: (value: number, options?: { snap?: boolean }) => void;
+  setTurntable: (value: boolean) => void;
+  setIntroActive: (value: boolean) => void;
   setSection: (id: SectionPlane['id'], patch: Partial<SectionPlane>) => void;
   resetView: () => void;
   setCameraPreset: (preset: CameraPreset) => void;
@@ -131,6 +136,7 @@ export const useAppStore = create<AppState & AppActions>((set, get) => ({
   hoveredComponentId: null,
   renderMode: 'realistic',
   explode: 0,
+  explodeSnap: 0,
   sections: DEFAULT_SECTIONS.map((s) => ({ ...s })),
   cameraPreset: 'three_quarter',
   focusedComponentId: null,
@@ -138,6 +144,8 @@ export const useAppStore = create<AppState & AppActions>((set, get) => ({
   simSpeed: 1,
   controls: { ...DEFAULT_CONTROLS },
   cutaway: false,
+  turntable: false,
+  introActive: false,
   showFlows: true,
   showLabels: true,
   inspectorOpen: false,
@@ -207,7 +215,14 @@ export const useAppStore = create<AppState & AppActions>((set, get) => ({
     }),
 
   setRenderMode: (renderMode) => set({ renderMode }),
-  setExplode: (explode) => set({ explode: Math.min(1, Math.max(0, explode)) }),
+  setExplode: (explode, options) =>
+    set({
+      explode: Math.min(1, Math.max(0, explode)),
+      ...(options?.snap ? { explodeSnap: get().explodeSnap + 1 } : {}),
+    }),
+
+  setTurntable: (turntable) => set({ turntable }),
+  setIntroActive: (introActive) => set({ introActive }),
 
   setSection: (id, patch) =>
     set({ sections: get().sections.map((s) => (s.id === id ? { ...s, ...patch } : s)) }),
@@ -221,6 +236,7 @@ export const useAppStore = create<AppState & AppActions>((set, get) => ({
       focusedComponentId: null,
       activeSystems: new Set<SystemId>(),
       cutaway: false,
+      turntable: false,
     }),
 
   setCameraPreset: (cameraPreset) => set({ cameraPreset }),
